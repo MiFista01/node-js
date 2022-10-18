@@ -1,55 +1,58 @@
 const db = require('../connection/database')
-const {Sequelize} = require('sequelize')
+const {DataTypes, Model} = require('sequelize')
 
-const Book = db.define('book',{
+class Book extends Model {}
+Book.init({
     id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false
     },
     title: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         autoIncrement: false,
         allowNull: false
     },
     isbn: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         autoIncrement: false,
         allowNull: false
     },
     page_count: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         autoIncrement: false,
         allowNull: false
     },
     published_date:{
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
         allowNull: false,
         allowNull: false
     },
     thumnbnail_URL:{
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         autoIncrement: false,
         allowNull: false
     },
     short_description:{
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
         allowNull: false
     }
     ,
     long_description:{
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
         allowNull: false
     },
     status:{
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
         allowNull: false
     }
 },{
-    timestamps: false
+    sequelize:db,
+    timestamps: false,
+    modelName: 'book'
 })
 module.exports = Book

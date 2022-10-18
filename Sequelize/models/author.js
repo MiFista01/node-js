@@ -8,12 +8,12 @@ const Author = db.define('authors',{
         primaryKey: true,
         allowNull: false
     },
-    authors_name: {
+    name: {
         type: Sequelize.STRING,
         autoIncrement: false,
         allowNull: false
     },
-    authors_last_name: {
+    last_name: {
         type: Sequelize.STRING,
         autoIncrement: false,
         allowNull: false
