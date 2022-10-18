@@ -1,14 +1,11 @@
 const db = require("./connection/database")
-const category_fun = require("./functions/category_fun")
-const author_fun = require("./functions/author_fun")
-const {Sequelize} = require('sequelize')
-// let Category = require("./models/category")
-// Category.sync( alter = true)
-// let Author = require("./models/authors")
-// Author.sync()
-// let Book = require("./models/book")
-// Book.sync()
-// category_fun.destroy({name:"action"})
-const A = Sequelize.define("authors")
-const B = Sequelize.define("book")
-A.belongsToMany(B)
+
+const Category = require("./models/category");
+const Author = require("./models/author");
+const Book = require("./models/book"); 
+const fun = require("./fun");
+const Fun = require("./fun");
+let category_fun = new Fun(Category);
+let book_fun = new Fun(Book);
+let author_fun = new Fun(Author);
+
