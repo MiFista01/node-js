@@ -2,6 +2,38 @@ class Fun{
     constructor(entity) {
         this.entity = entity;
     }
+    async getOne(parametrs){
+        let count =  Object.keys(parametrs).length;
+        Object.keys(parametrs).forEach(element => {
+            if (parametrs[element]!= null || parametrs[element]!= undefined || parametrs[element]!= ""){
+                count -= 1;
+            }
+        });
+        if(count == 0){
+            var found = await this.entity.findOne({where: parametrs}).then(res=>{return res.dataValues})
+            return new Promise(function(res,rej){res(found)})
+        }
+    }
+    getAll(parametrs = ""){
+        if (parametrs != ""){
+            let count =  Object.keys(parametrs).length;
+            Object.keys(parametrs).forEach(element => {
+                if (parametrs[element]!= null || parametrs[element]!= undefined || parametrs[element]!= ""){
+                    count -= 1;
+                }
+                if(count == 0){
+                    this.entity.findAll({where: parametrs, raw: true}).
+                                    then(res =>{console.log(res);}).
+                                    catch(err =>{console.log(err);})
+                }
+            });
+            
+        }else{
+            return this.entity.findAll({where: parametrs, raw: true}).
+                                    then(res =>{console.log(res);}).
+                                    catch(err =>{console.log(err);})
+        }
+    }
     create(data){
         let unq = new Set(data)
         
