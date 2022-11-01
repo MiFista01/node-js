@@ -7,48 +7,36 @@ Book.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
+        fields: "id"
     },
     title: {
         type: DataTypes.STRING,
         autoIncrement: false,
-        allowNull: false
     },
     isbn: {
         type: DataTypes.INTEGER,
         autoIncrement: false,
-        allowNull: false
     },
     page_count: {
         type: DataTypes.INTEGER,
         autoIncrement: false,
-        allowNull: false
     },
     published_date:{
         type: DataTypes.DATE,
-        allowNull: false,
-        allowNull: false
     },
     thumnbnail_URL:{
         type: DataTypes.STRING,
-        autoIncrement: false,
-        allowNull: false
     },
     short_description:{
         type: DataTypes.STRING,
-        allowNull: false,
-        allowNull: false
     }
     ,
     long_description:{
         type: DataTypes.STRING,
-        allowNull: false,
-        allowNull: false
     },
     status:{
         type: DataTypes.STRING,
-        allowNull: false,
-        allowNull: false
     }
 },{
     sequelize:db,

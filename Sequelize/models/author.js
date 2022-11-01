@@ -6,7 +6,8 @@ const Author = db.define('authors',{
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
+        fields: "id"
     },
     name: {
         type: Sequelize.STRING,

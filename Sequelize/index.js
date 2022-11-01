@@ -4,18 +4,13 @@ const fs = require('fs');
 const Category = require("./models/category");
 const Author = require("./models/author");
 const Book = require("./models/book"); 
-const Fun = require("./fun");
-// Book.belongsToMany(Author, {through:"BookAuthor"});
-// Book.belongsToMany(Category, {through:"BookCategory"});
-// db.sync()
-// let category_fun = new Fun(Category);
-// let book_fun = new Fun(Book);
-// let author_fun = new Fun(Author);
+const BookCategory = require("./models/book_categories");
+const BookAuthor = require("./models/book_author");
+// db.sync({force:true})
 
 let rawdata = fs.readFileSync('books_data.json');
 let books = JSON.parse(rawdata);
 
-// author_fun.getOne({ id: 1 }).then(function(result){console.log(result)})
 let books_data = []
 books.forEach(element => {
     let book_data = {}
@@ -51,15 +46,23 @@ books.forEach(element => {
     }
     books_data.push(book_data)
 });
-
 async function create(data){
-    let unq = new Set(data)
-    let authors = new Set()
-    let categories = new Set()
-    unq.forEach(element => {
-        Book.create(element).
-        then(res =>{console.log(res);}).
-        catch(err =>{console.log(err);})
-    });
-    console.log(books_data.length)
+    for(let i of data){
+        let book_datas = Array.prototype.slice.call(i, 0,0)
+        delete book_datas.authors
+        delete book_datas.categories
+        let book = await Book.findOrCreate({where:{title:i.title},defaults:book_datas})
+        for(let j of i.authors){
+            let last_name = j.split(' ').slice(-1).join(' ');
+            var name = j.split(' ').slice(0, -1).join(' ');
+            let author = await Author.findOrCreate({where:{name:name},defaults:{name:name,last_name:last_name}})
+            BookAuthor.findOrCreate({where:{id_book:book[0].dataValues.id, id_author:author[0].dataValues.id},defaults:{id_book:book[0].dataValues.id, id_author:author[0].dataValues.id}})
+        }
+        for(let j of i.categories){
+            let category = await Category.findOrCreate({where:{name:j},defaults:{name:j}})
+            BookCategory.findOrCreate({where:{id_book:book[0].dataValues.id, id_category:category[0].dataValues.id},defaults:{id_book:book[0].dataValues.id, id_category:category[0].dataValues.id}})
+
+        }
+    }
 }
+create(books_data)
