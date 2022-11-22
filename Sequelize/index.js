@@ -138,7 +138,7 @@ async function get_Books (count = 0, order = "ASC"){
 }
 
 async function post(){
-    let books = await get_Books(3,"DESC")
+    let books = await get_Books(1)
     var express = require('express');
     var app = express();
     // set the view engine to ejs

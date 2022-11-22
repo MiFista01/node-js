@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head'); %>
+</head>
+<body class="container">
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<main>
+  <div class="jumbotron">
+    <h1>Recently added books</h1>
+    <%for(let i of books){%>
+      <div>
+        <img src="<%=i[0]['thumnbnail_URL']%>" alt="">
+        <%for(let j in i[0]){%>
+           
+            <%if(j != "long_description" && j != "thumnbnail_URL"){%>
+              <%if(j != "title"){%>
+                <p><%=(j[0].toUpperCase() + j.substring(1)).replace("_"," ")%>:<%=i[0][j]%></p>
+              <%} else{%>
+                <p><%=(j[0].toUpperCase() + j.substring(1)).replace("_"," ")%>:<%=i[0][j]%></p>
+              <%}%>
+            <%}%>
+            
+        <%}%>
+      </div>
+    <%}%>
+  </div>
+</main>
+
+<footer>
+  <%- include('../partials/footer'); %>
+</footer>
+
+</body>
+</html>
