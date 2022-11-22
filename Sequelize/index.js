@@ -136,20 +136,95 @@ async function get_Books (count = 0, order = "ASC"){
     }
     return array_books
 }
-
-async function post(){
-    let books = await get_Books(1)
-    var express = require('express');
-    var app = express();
-    // set the view engine to ejs
-    app.set('view engine', 'ejs');
-
-    // index page
-    app.get('/', function(req, res) {
-        res.render('pages/index',{books:books});
-    });
-
-    app.listen(3000);
-    console.log('Server is listening on port 8080');
+async function get_book(name,value){
+    let book = []
+    let where = {}
+    where[name] = value
+    let book_prime = await Book.findOne({where: where})
+    book.push(book_prime)
+    let id_categories = await BookCategory.findAll({
+        attributes:[["id_category","id"]],
+        where:{id_book:book_prime.id}
+    })
+    let categories = [];
+    for (let j of id_categories){
+        let category = await Category.findOne({where:{id:j.id}})
+        categories.push(category.name)
+    }
+    let id_authors = await BookAuthor.findAll({
+        attributes:[["id_author","id"]],
+        where:{id_book:book_prime.id}})
+    let authors = [];
+    for (let j of id_authors){
+        let author = await Author.findOne({where:{id:j.dataValues.id}})
+        authors.push(author.name + " "+ author.last_name)
+    }
+    book.push(categories)
+    book.push(authors)
+    return book
 }
-post()
+async function find_authorBook(name,value){
+    console.log(name)
+    let where = {}
+    where[name] = value
+    let books = []
+    var author = await Author.findOne({where:where})
+    var Name = author.name
+    var Lastname = author.lastname
+    let author_booksId = await BookAuthor.findAll({where:{id_author:author.id}})
+    for(let i of author_booksId){
+        let book = []
+        let book_prime = await Book.findOne({where:{id:i.id_book}})
+        let category_id = await BookCategory.findAll({where:{id_book:i.id_book}})
+        let categories = []
+        let author = []
+        author.push(Name+" "+Lastname)
+        for(let j of category_id){
+           let category = await Category.findOne({where:{id:j.id_category}})
+           categories.push(category.name)
+        }
+        book.push(book_prime.dataValues)
+        book.push(categories)
+        book.push(author)
+        books.push(book)
+    }
+    return books
+}
+async function print(){
+    let books = []
+    var category = await Category.findOne({where:{name:{[Op.substring]:"Open"}}})
+    console.log(category)
+    let categories_id = await BookCategory.findAll({where:{id_category:category.id}})
+    
+}
+print()
+// var express = require('express');
+// var app = express();
+// // set the view engine to ejs
+// app.set('view engine', 'ejs');
+
+
+// app.get('/', function(req, res) {
+//     get_Books(5).then(data =>{
+//         res.send(data)
+//     })
+// });
+
+// app.get('/book/:paramname/:value', function(req, res) {
+//     get_book(req.params.paramname, req.params.value).then(data =>{
+//         res.send(data)
+//     })
+// });
+// app.get('/author_book/:paramname/:value', function(req, res) {
+//     find_authorBook(req.params.paramname, req.params.value).then(data =>{
+//         res.send(data)
+//     })
+// });
+// app.get('/category_book/:paramname/:value', function(req, res) {
+//     find_categoryBook(req.params.paramname, req.params.value).then(data =>{
+//         res.send(data)
+//     })
+// });
+// // res.render('pages/index',{books:books});
+// app.listen(3000);
+// console.log('Server is listening on port 8080');
