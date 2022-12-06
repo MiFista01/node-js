@@ -126,7 +126,6 @@ $(document).ready(function () {
                         $($($(form).next()).children()[1]).append(row);
                     }
                     form.name.value = null
-                    $(".objs").load(location.href+" .objs*","");
                 }
             }
         });
@@ -168,6 +167,7 @@ function showForm(obj) {
     });
 }
 function update(form_upd) {
+    console.log(form_upd)
     $(form_upd).submit(function (e) { 
         e.preventDefault();
         let form = this

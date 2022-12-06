@@ -83,6 +83,15 @@ app.post("/updater",async function(req,res){
         }
         
     }
+    if(req.body.obj == "platform"){
+        try {
+            Platform.update({name:req.body.value},{where:{id:req.body.id}})
+            res.send({status:1})
+        } catch (error) {
+            res.send({status:0})
+        }
+        
+    }
  })
 // ==============================send data===============================
 
