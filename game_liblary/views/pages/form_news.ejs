@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../partials/head'); %>
+        <script src="scripts/form_news.js"></script>
+    </head>
+    <body class="">
+
+        <header>
+            <%- include('../partials/header'); %>
+        </header>
+        <main>
+            <h1>Form for news</h1>
+            <form id="form" method="POST" style="width: 50%;">
+                <input type="text" name="title" placeholder="News Title">
+                <input type="text" name="link" placeholder="News link">
+                <textarea name="news_text" id="" cols="30" rows="10" placeholder="Text of News"></textarea>
+                <button>create</button>            
+            </form>
+            
+        </main>
+
+        <footer>
+            <%- include('../partials/footer'); %>
+        </footer>
+
+    </body>
+</html>

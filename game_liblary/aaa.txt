@@ -1,0 +1,385 @@
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(19, 19, 30);
+    font-family: "VIDEOPHREAK";
+}
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+/* Track */
+::-webkit-scrollbar-track {
+background: #060417;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: rgb(35, 32, 49);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: rgb(38, 31, 56);
+}
+header{
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    color: white;
+    background-color: rgb(12, 11, 15);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+header h1{
+    margin: 0;
+    font-size: 2.5vw;
+    width: min-content;
+}
+#home{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+}
+#home p{
+    margin: 0;
+    font-size: 20px;
+}
+#icon{
+    width: 7vw;
+}
+header h2{
+    margin: 0;
+    font-size: 25px;
+}
+header a{
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 0;
+}
+header ul{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    margin: 0;
+    z-index: 5;
+    
+}
+header ul li{
+    margin: 0px 10px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    text-align: center;
+    width: 100%;
+}
+.managers{
+    display: none;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.361);
+    top: 30px;
+    padding: 0;
+}
+.managers li{
+    margin: 0px 0px;
+    margin-right: 40px;
+    cursor: auto;
+}
+.wrapper{
+    width: 99%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    color: white;
+}
+.news{
+    width: 14%;
+    position: sticky;
+    overflow: scroll;
+    height: 100vh;
+    top: 0px;
+}
+.news::-webkit-scrollbar{
+    display: none;
+}
+.news h2{
+    width: 100%;
+    text-align: center;
+}
+.news h4{
+    width: 100%;
+    text-align: center;
+    margin: 0;
+}
+.news p{
+    margin: 0;
+}
+.news a{
+    text-decoration: none;
+}
+.news_block{
+    margin-bottom: 30px;
+    border-bottom: 1px solid white;
+    padding: 10px;
+    box-sizing: border-box;
+}
+main{
+    width: 85%;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    color: white;
+}
+main h1{
+    width: 100%;
+    text-align: center;
+    font-size: 40px;
+}
+.game{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    width: 32%;
+    border: 2px solid black;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.35);
+    border-radius: 20px;
+}
+.game a{
+    width: 100%;
+}
+.game .game_img{
+    width: 100%;
+    height: 34vw;
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+}
+#form{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(246, 246, 246);
+    padding: 20px;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    color: black;
+    justify-content: space-between;
+}
+#form h2,#form h3{
+    width: 100%;
+    text-align: center;
+    margin: 0;
+}
+#form p, #form label{
+    color: black;
+    user-select: none;
+}
+.image_input{
+    width: 30vw;
+    position: sticky;
+}
+.image_input input{
+    display: none;
+}
+.image_input .image{
+    width: 25vw;
+    height: 40vw;
+    background-image: url("../imgs/add_image.svg");
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    background-color: rgba(221, 221, 221, 0);
+    border: 20px solid rgb(0, 0, 0);
+    border-radius: 20px;
+    transition-duration: 0.2s;
+    user-select: none;
+    position: sticky;
+    top: 10px;
+}
+.dates{
+    width: 1px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    flex-grow: 2;
+}
+#form input{
+    width: 100%;
+    height: 3vw;
+    border: 2px solid rgb(19, 15, 35);
+    color: rgb(19, 15, 35);
+    outline: none;
+    margin: 5px 0px;
+    background-color: rgb(255, 255, 255);
+    font-family: "VIDEOPHREAK";
+    font-weight: bold;
+    font-size: 1.2vw;
+    padding: 5px;
+    box-sizing: border-box;
+}
+.dates input[type="date"]{
+    user-select: none;
+}
+#form textarea{
+    resize: none;
+    width: 100%;
+    height: 12vw;
+    font-family: "VIDEOPHREAK";
+    font-weight: bold;
+    font-size: 1.2vw;
+    padding: 5px;
+    box-sizing: border-box;
+    border: 2px solid rgb(19, 15, 35);
+}
+.other{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-family: "VIDEOPHREAK";
+}
+.other .genres, .other .platforms{
+    width: 49%;
+}
+.checkboxes{
+    height: 15vh;
+    overflow: scroll;
+    border: 1px solid black;
+}
+.checkboxes::-webkit-scrollbar{
+    display: none;
+}
+.checkboxes div{
+    padding: 5px;
+    transition-duration: 0.2s;
+}
+.checkboxes div:hover{
+    background-color: rgba(0, 0, 0, 0.07);
+}
+.other .button{
+    background-color: white;
+    text-align: center;
+    padding: 10px 40px;
+    border: 2px solid rgb(19, 15, 35);
+    cursor: pointer;
+    font-size: 1vw;
+}
+#form .button:hover{
+    background-color: whitesmoke;
+}
+#form button{
+    background-color: white;
+    width: max-content;
+    text-align: center;
+    padding: 10px 40px;
+    border: 2px solid rgb(19, 15, 35);
+    font-family: "VIDEOPHREAK";
+    text-transform: uppercase;
+    font-size: 1.5vw;
+    font-weight: 900;
+    cursor: pointer;
+}
+#form button:hover{
+    background-color: whitesmoke;
+}
+.manager{
+    width: 45%;
+    height: max-content;
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: space-between;
+    color: black;
+    padding: 20px;
+}
+.manager h2,.manager h3{
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+.block{
+    width: 48%;
+    margin: 0;
+    padding: 0;
+}
+.block input{
+    width: 100%;
+    height: 3vw;
+    border: 2px solid rgb(19, 15, 35);
+    color: rgb(19, 15, 35);
+    outline: none;
+    margin: 5px 0px;
+    background-color: rgb(255, 255, 255);
+    font-family: "VIDEOPHREAK";
+    font-weight: bold;
+    font-size: 1.4vw;
+    padding: 5px;
+    box-sizing: border-box;
+}
+.borers{
+    border: 1px solid black;
+}
+.block button{
+    background-color: white;
+    width: max-content;
+    text-align: center;
+    padding: 10px 40px;
+    border: 2px solid rgb(19, 15, 35);
+    font-family: "VIDEOPHREAK";
+    text-transform: uppercase;
+    font-size: 1vw;
+    font-weight: 900;
+    cursor: pointer;
+}
+.objs{
+    height: 15vh;
+    overflow-y: scroll;
+}
+.objs::-webkit-scrollbar{
+    display: none;
+}
+.row{
+    padding: 10px;
+    box-sizing: border-box;
+}
+.row p{
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+}
+.block .events{
+    position: relative;
+}
+.block 
+footer{
+    width: 100%;
+    color: white;
+    background-color: black;
+    margin-top: 30px;
+    border-top: 3px solid white;
+    border-bottom: 3px solid white;
+}
