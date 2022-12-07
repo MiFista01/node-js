@@ -39,37 +39,46 @@ $(document).ready(function () {
         $("input:checkbox[name=platform]:checked").each(function() {
             platforms.push($(this).val());
         });
-        $.ajax({
-            type: "POST",
-            url: "/create_game",
-            data: {title:form.title.value,
-                published_date:form.date.value,
-                issuer:form.issuer.value,
-                developer:form.developer.value,
-                description:form.description.value,
-                img: image.toString(),
-                genres:genres.toString(),
-                platforms: platforms.toString()},
-            dataType: "json",
-            success: function (response) {
-                if(response.status == 1){
-                    form.title.value = null
-                    form.date.value = null
-                    form.issuer.value = null
-                    form.developer.value = null
-                    form.description.value = null
-                    form.img.value = null
-                    $(".checkboxes").empty();
-                    $(".image").css({
-                        "background-image": "url(../imgs/add_image.svg)",
-                        "background-size": "80%",
-                        "border": "20px solid rgb(0, 0, 0)",
-                        
-                    });
-                    inputDataList()
+        if(form.img.value!=""){
+            $.ajax({
+                type: "POST",
+                url: "/create_game",
+                data: {title:form.title.value,
+                    published_date:form.date.value,
+                    issuer:form.issuer.value,
+                    developer:form.developer.value,
+                    description:form.description.value,
+                    img: image.toString(),
+                    genres:genres,
+                    platforms: platforms},
+                dataType: "json",
+                success: function (response) {
+                    console.log(response)
+                    if(response.status == 1){
+                        form.title.value = null
+                        form.date.value = null
+                        form.issuer.value = null
+                        form.developer.value = null
+                        form.description.value = null
+                        form.img.value = null
+                        $(".checkboxes").empty();
+                        $(".image").css({
+                            "background-image": "url(../imgs/add_image.svg)",
+                            "background-size": "80%",
+                            "border": "20px solid rgb(0, 0, 0)",
+                            
+                        });
+                        inputDataList()
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            $("#add_image").css("background-color", "rgba(255, 0, 0, 0.501)");
+            setTimeout(() => {
+                $("#add_image").css("background-color", "rgba(255, 0, 0, 0)");
+            }, 200);
+        }
+        
     });
     $("#add_genre").click(function (e) { 
         e.preventDefault();

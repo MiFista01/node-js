@@ -58,8 +58,30 @@ app.get('/genre_platform', async function(req, res){
     let platforms = await Platform.findAll()
     res.render('pages/genre_platform',{genres:genres, platforms:platforms})
 })
+var game_datas = ""
 app.get('/game/:id', async function(req, res){
-    console.log(req.params.id)
+    let game = await Game.findOne({where:{id:req.params.id}})
+    let game_genre = await GameGenre.findAll({where:{id_game:req.params.id}})
+    let genres = []
+    let all_genres = await Genre.findAll({attributes: ['name']})
+    let all_platforms = await Platform.findAll({attributes: ['name']})
+    for(let i of game_genre){
+        let genre = await Genre.findOne({where:{id:i.id_genre}})
+        if (genre != null){
+            genres.push(genre)
+        }
+    }
+    let game_platform = await GamePlatform.findAll({where:{id_game:req.params.id}})
+    let platforms = []
+    for(let i of game_platform){
+        let platform = await Platform.findOne({where:{id:i.id_platform}})
+        if (platform != null){
+            platforms.push(platform)
+        }
+    }
+    game_datas = {prime:game, genres: genres, platforms: platforms}
+    res.render('pages/game',{prime:game, genres: genres, platforms: platforms, read:false, all_genres:all_genres, all_platforms: all_platforms})
+    
 })
 // ==============================routes=============================
 
@@ -92,6 +114,63 @@ app.post("/updater",async function(req,res){
         }
         
     }
+    if(req.body.obj == "game"){
+        try {
+            let game = await Game.findOne({where:{id:req.body.id}})
+            if(req.body.prime != undefined){
+                for(let i in req.body.prime){
+                    if(game[i] != req.body.prime[i]){
+                        game[i] = req.body.prime[i]
+                    }
+                }
+                game.save()
+            }
+            let old_genres = await GameGenre.findAll({where:{id_game:req.body.id}})
+            if(isIterable(req.body.genres)){
+                for(let i of req.body.genres){
+                    let genre = await Genre.findOne({where:{name:i}})
+                    if (genre == null){
+                        let new_genre = await Genre.create({name:i})
+                        let new_game_genre = await GameGenre.create({id_game:req.body.id, id_genre:new_genre.id})
+                    }else{
+                        let game_genre = await GameGenre.findOne({where:{id_game:req.body.id, id_genre:genre.id}})
+                        if(game_genre == null){
+                            GameGenre.create({id_game:req.body.id, id_genre:genre.id})
+                        }else{
+                            old_genres = arrayRemove(old_genres,genre.id,"id_genre")
+                        }
+                    }
+                }
+            }
+            for(let i of old_genres){
+                GameGenre.destroy({where:{id_genre:i.id_genre}})
+            }
+            let old_platforms = await GamePlatform.findAll({where:{id_game:req.body.id}})
+            if(isIterable(req.body.platforms)){
+                for(let i of req.body.platforms){
+                    let platform = await Platform.findOne({where:{name:i}})
+                    if (platform == null){
+                        let new_platform = await Platform.create({name:i})
+                        let new_game_platform = await GamePlatform.create({id_game:req.body.id, id_platform:new_platform.id})
+                    }else{
+                        let game_platform = await GamePlatform.findOne({where:{id_game:req.body.id, id_platform:platform.id}})
+                        if(game_platform == null){
+                            GamePlatform.create({id_game:req.body.id, id_platform:platform.id})
+                        }else{
+                            old_platforms = arrayRemove(old_platforms,platform.id,"id_platform")
+                        }
+                    }
+                }
+            }
+            for(let i of old_platforms){
+                GamePlatform.destroy({where:{id_platform:i.id_platform}})
+            }
+            res.send({status:1})
+        } catch (error) {
+            res.send({status:0})
+        }
+        
+    }
  })
 // ==============================send data===============================
 
@@ -100,18 +179,23 @@ app.post("/updater",async function(req,res){
 app.post("/create_game", async function(req, res){
     try {
         let game_data = req.body
-        let genres = req.body.genres.split(",")
-        let platforms = req.body.platforms.split(",")
+        let genres = req.body.genres
+        let platforms = req.body.platforms
         delete game_data.genres
         let game = await Game.create(game_data)
-        for(let i of genres){
-            let genre = await Genre.findOrCreate({where:{name:i}})
-            GameGenre.findOrCreate({where:{id_game:game.id,id_genre:genre[0].id}})
+        if(isIterable(genres)){
+            for(let i of genres){
+                let genre = await Genre.findOrCreate({where:{name:i}})
+                GameGenre.findOrCreate({where:{id_game:game.id,id_genre:genre[0].id}})
+            }
         }
-        for(let i of platforms){
-            let platform = await Platform.findOrCreate({where:{name:i}})
-            GamePlatform.findOrCreate({where:{id_game:game.id,id_platform:platform[0].id}})
+        if(isIterable(platforms)){
+            for(let i of platforms){
+                let platform = await Platform.findOrCreate({where:{name:i}})
+                GamePlatform.findOrCreate({where:{id_game:game.id,id_platform:platform[0].id}})
+            }
         }
+        
         res.send({status:1})
     } catch (error) {
         res.send({status:0})
@@ -148,3 +232,20 @@ app.post("/create_platform", async function(req, res){
 })
 // ================================creat obj================================
 app.listen(3000);
+
+
+// ===========================functions=========================================
+function isIterable(obj) {
+    // checks for null and undefined
+    if (obj == null) {
+      return false;
+    }
+    return typeof obj[Symbol.iterator] === 'function';
+}
+function arrayRemove(arr, value, key) { 
+    
+    return arr.filter(function(ele){ 
+        return ele[key] != value; 
+    });
+}
+// ===========================functions=========================================
