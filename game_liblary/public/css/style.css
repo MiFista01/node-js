@@ -28,6 +28,9 @@ background: rgb(35, 32, 49);
 ::-webkit-scrollbar-thumb:hover {
 background: rgb(38, 31, 56);
 }
+datalist::-webkit-scrollbar{
+    display: none;
+}
 header{
     width: 100%;
     padding: 10px;
@@ -171,7 +174,7 @@ main h1{
 }
 .game .game_img{
     width: 100%;
-    height: 34vw;
+    height: 40vw;
     background-size: cover;
     background-position: center;
     border-radius: 20px;
@@ -421,6 +424,79 @@ main h1{
 .update button{
     font-size: 0.7vw;
     padding: 5px 25px;
+}
+.search{
+    width: 95%;
+}
+.search_block{
+    position: fixed;
+    background-color: rgb(35, 33, 44);
+    width: 20vw;
+    height: max-content;
+    z-index: 10;
+    right: 1vw;
+    bottom: 0px;
+    user-select: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.ui{
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+.draggeble{
+    background-color: rgb(45, 44, 62);
+    width: 80%;
+    cursor: move;
+    flex-grow: 1;
+    transition-duration: 0.2s;
+}
+.draggeble p{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+    color: rgb(70, 70, 101);
+}
+.draggeble:hover{
+    background-color: rgb(58, 58, 75);
+}
+#slide{
+    width: 2vw;
+    background-color: rgb(45, 44, 62);
+    transform: rotate(180deg);
+    cursor: pointer;
+    transition-duration: 0.2s;
+}
+#slide:hover{
+    background-color: rgb(27, 26, 38);
+}
+.search_block form{
+    width: 100%;
+}
+.search_inputs{
+    display: none;
+    padding: 5px;
+    box-sizing: border-box;
+    width: 100%;
+    padding-top: 10px;
+}
+.search_inputs div{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2px;
+}
+.search_inputs input,.search_inputs button{
+    font-family: "VIDEOPHREAK";
+}
+.search_inputs input{
+    width: 48%;
+    margin: 0;
+    padding: 0;
+}
+.search_inputs button{
+    margin-top: 5px;
 }
 footer{
     width: 100%;

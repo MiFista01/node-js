@@ -39,6 +39,7 @@ $(document).ready(function () {
         $("input:checkbox[name=platform]:checked").each(function() {
             platforms.push($(this).val());
         });
+        console.log(genres)
         if(form.img.value!=""){
             $.ajax({
                 type: "POST",
@@ -49,8 +50,8 @@ $(document).ready(function () {
                     developer:form.developer.value,
                     description:form.description.value,
                     img: image.toString(),
-                    genres:genres,
-                    platforms: platforms},
+                    genres,
+                    platforms},
                 dataType: "json",
                 success: function (response) {
                     console.log(response)

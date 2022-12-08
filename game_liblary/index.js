@@ -1,3 +1,4 @@
+const {Op, Sequelize} = require('sequelize');
 const db = require("./connection/database")
 const Game = require("./models/game")
 const Genre = require("./models/genre")
@@ -13,8 +14,8 @@ var app = express()
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 var bodyParser = require('body-parser');
-app.use(bodyParser.json({limit: "300mb"}));
-app.use(bodyParser.urlencoded({limit: "300mb", extended: true, parameterLimit:50000}));
+app.use(bodyParser.json({limit: "4000mb"}));
+app.use(bodyParser.urlencoded({limit: "4000mb", extended: true, parameterLimit:5000000}));
 // ===================settings============================
 
 // ==============================routes=============================
@@ -47,8 +48,10 @@ app.get('/', async function(req, res){
     let news = await News.findAll({order:[["id","DESC"]],limit:5})
     res.render('pages/index', {games:games,news:news})
 })
-app.get('/form_game', (req, res) => {
-    res.render('pages/form_game')
+app.get('/form_game', async function(req, res){
+    let all_issuers = await Game.findAll({attributes: ['issuer'],distinct: 'issuer'})
+    let all_developers = await Game.findAll({attributes: ['developer'],distinct: 'Developer'})
+    res.render('pages/form_game',{all_issuers, all_developers})
 })
 app.get('/form_news', (req, res) => {
     res.render('pages/form_news')
@@ -65,6 +68,8 @@ app.get('/game/:id', async function(req, res){
     let genres = []
     let all_genres = await Genre.findAll({attributes: ['name']})
     let all_platforms = await Platform.findAll({attributes: ['name']})
+    let all_issuers = await Game.findAll({attributes: ['issuer'],distinct: 'issuer'})
+    let all_developers = await Game.findAll({attributes: ['developer'],distinct: 'Developer'})
     for(let i of game_genre){
         let genre = await Genre.findOne({where:{id:i.id_genre}})
         if (genre != null){
@@ -80,8 +85,50 @@ app.get('/game/:id', async function(req, res){
         }
     }
     game_datas = {prime:game, genres: genres, platforms: platforms}
-    res.render('pages/game',{prime:game, genres: genres, platforms: platforms, read:false, all_genres:all_genres, all_platforms: all_platforms})
+    res.render('pages/game',{prime:game, genres: genres, platforms: platforms, read:false, all_genres:all_genres, all_platforms: all_platforms,all_issuers,all_developers})
     
+})
+app.get('/search_page', async function(req, res){
+    let games_prime = await Game.findAll({where:{ title: {[Op.substring]: ""}},order:[["id","ASC"]]})
+    let games = []
+    for(let i of games_prime){
+        let game = {}
+        game.prime = i
+        let game_genres = await GameGenre.findAll({where:{id_game:i.id}})
+        let genres = []
+        for(let j of game_genres){
+            let genre = await Genre.findOne({where:{id:j.id_genre}})
+            if (genre != null){
+                genres.push(genre.name)
+            }
+        }
+        game.genres = genres
+        let game_platforms = await GamePlatform.findAll({where:{id_game:i.id}})
+        let platforms = []
+        for(let j of game_platforms){
+            let platform = await Platform.findOne({where:{id:j.id_platform}})
+            if (platform != null){
+                platforms.push(platform.name)
+            }
+        }
+        game.platforms = platforms
+        games.push(game)
+    }
+    let titles = await Game.findAll({
+        attributes: ['title'],
+        distinct: true
+    })
+    let issuers = await Game.findAll({
+        attributes: ['issuer'],
+        distinct: true
+    })
+    let developers = await Game.findAll({
+        attributes: ['developer'],
+        distinct: true
+    })
+    let genres = await Genre.findAll({attributes: ['name']})
+    let platforms = await Platform.findAll({attributes: ['name']})
+    res.render('pages/page_search', {games:games, titles, issuers, developers, genres, platforms})
 })
 // ==============================routes=============================
 
@@ -178,19 +225,20 @@ app.post("/updater",async function(req,res){
 // ================================creat obj================================
 app.post("/create_game", async function(req, res){
     try {
-        let game_data = req.body
-        let genres = req.body.genres
-        let platforms = req.body.platforms
+        let game_data = JSON.parse(JSON.stringify(req.body))
         delete game_data.genres
+        delete game_data.platforms
         let game = await Game.create(game_data)
-        if(isIterable(genres)){
-            for(let i of genres){
+        if(isIterable(req.body.genres)){
+            for(let i of req.body.genres){
                 let genre = await Genre.findOrCreate({where:{name:i}})
                 GameGenre.findOrCreate({where:{id_game:game.id,id_genre:genre[0].id}})
             }
         }
-        if(isIterable(platforms)){
-            for(let i of platforms){
+        
+        if(isIterable(req.body.platforms)){
+            console.log(req.body.platforms)
+            for(let i of req.body.platforms){
                 let platform = await Platform.findOrCreate({where:{name:i}})
                 GamePlatform.findOrCreate({where:{id_game:game.id,id_platform:platform[0].id}})
             }

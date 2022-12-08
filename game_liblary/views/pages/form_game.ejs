@@ -19,8 +19,18 @@
                 <div class="dates">
                     <input type="text" name="title" placeholder="Name">
                     <input type="date" name="date">
-                    <input type="text" name="issuer" placeholder="Issure">
-                    <input type="text" name="developer" placeholder="Developer">
+                    <input type="text" name="issuer" placeholder="Issure"  autocomplete="off" list="issuers">
+                    <datalist id="issuers">
+                        <% all_issuers.forEach(element => { %>
+                         <option value="<%=element.issuer%>"></option>
+                        <% }) %>
+                    </datalist>
+                    <input type="text" name="developer" placeholder="Developer" autocomplete="off" list="developers">
+                    <datalist id="developers">
+                        <% all_developers.forEach(element => { %>
+                         <option value="<%=element.developer%>"></option>
+                        <% }) %>
+                    </datalist>
                     <textarea name="description" id="" cols="30" rows="10" placeholder="Description" ></textarea>
                     <div class="other">
                         <div class="genres">
