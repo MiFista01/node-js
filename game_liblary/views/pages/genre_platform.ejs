@@ -5,73 +5,74 @@
         <script src="scripts/gen_plat_manager.js"></script>
     </head>
     <body class="">
-        <header>
-            <%- include('../partials/header'); %>
-        </header>
-        <main>
-            <h1>Genres and Platforms</h1>
-            <div class="manager">
-                <h2>Genres</h2>
-                <form id="add_genre" class="block">
-                    <h3>Create genre</h3>
-                    <input type="text" name="name" placeholder="Add Genre" autocomplete="off" required>
-                    <button>create</button>
-                </form>
-                <div class="block">
-                    <h3>Update/Delete</h3>
-                    <div class="objs borders">
-                        <% genres.forEach(element => { %>
-                            <div class="row">
-                                <div class="events">
-                                    <p id="<%=element.id%>" class="hover btn"><%=element.name%></p>
-                                    <div class="buttons">
-                                        <p class="hover update_btn">Update</p>
-                                        <p class="hover delete_btn">Delete</p>
+        <div class="main">
+            <header>
+                <%- include('../partials/header'); %>
+            </header>
+            <main>
+                <h1>Genres and Platforms</h1>
+                <div class="manager">
+                    <h2>Genres</h2>
+                    <form id="add_genre" class="block">
+                        <h3>Create genre</h3>
+                        <input type="text" name="name" placeholder="Add Genre" autocomplete="off" required>
+                        <button>create</button>
+                    </form>
+                    <div class="block">
+                        <h3>Update/Delete</h3>
+                        <div class="objs borders">
+                            <% genres.forEach(element => { %>
+                                <div class="row">
+                                    <div class="events">
+                                        <p id="<%=element.id%>" class="hover btn"><%=element.name%></p>
+                                        <div class="buttons">
+                                            <p class="hover update_btn">Update</p>
+                                            <p class="hover delete_btn" obj="genre">Delete</p>
+                                        </div>
                                     </div>
+                                    <form id="update_form" class="update">
+                                        <input type="text" name="name" value="<%=element.name%>"  id="<%=element.id%>" obj="genre">
+                                        <button>Update</button>
+                                    </form>
                                 </div>
-                                <form id="update_form" class="update">
-                                    <input type="text" name="name" value="<%=element.name%>"  id="<%=element.id%>" obj="genre">
-                                    <button>Update</button>
-                                </form>
-                            </div>
-                        <% }) %>
+                            <% }) %>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="manager">
-                <h2>Platforms</h2>
-                <form id="add_platform" class="block">
-                    <h3>Create platform</h3>
-                    <input type="text" name="name" placeholder="Add Platform" autocomplete="off" required>
-                    <button>create</button>
-                </form>
-                <div class="block">
-                    <h3>Update/Delete</h3>
-                    <div class="objs borders">
-                        <% platforms.forEach(element => { %>
-                            <div class="row">
-                                <div class="events">
-                                    <p id="<%=element.id%>" class="hover btn"><%=element.name%></p>
-                                    <div class="buttons">
-                                        <p class="hover update">Update</p>
-                                        <p class="hover delete">Delete</p>
+                
+                <div class="manager">
+                    <h2>Platforms</h2>
+                    <form id="add_platform" class="block">
+                        <h3>Create platform</h3>
+                        <input type="text" name="name" placeholder="Add Platform" autocomplete="off" required>
+                        <button>create</button>
+                    </form>
+                    <div class="block">
+                        <h3>Update/Delete</h3>
+                        <div class="objs borders">
+                            <% platforms.forEach(element => { %>
+                                <div class="row">
+                                    <div class="events">
+                                        <p id="<%=element.id%>" class="hover btn"><%=element.name%></p>
+                                        <div class="buttons">
+                                            <p class="hover update_btn">Update</p>
+                                            <p class="hover delete_btn" obj="platform">Delete</p>
+                                        </div>
                                     </div>
+                                    <form id="update_form" class="update">
+                                        <input type="text" name="name" value="<%=element.name%>" id="<%=element.id%>" obj="platform">
+                                        <button>Update</button>
+                                    </form>
                                 </div>
-                                <form id="update_form" class="update">
-                                    <input type="text" name="name" value="<%=element.name%>" id="<%=element.id%>" obj="platform">
-                                    <button>Update</button>
-                                </form>
-                            </div>
-                        <% }) %>
+                            <% }) %>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </main>
-
-        <footer>
-            <%- include('../partials/footer'); %>
-        </footer>
-
+            </main>
+    
+            <footer>
+                <%- include('../partials/footer'); %>
+            </footer>
+        </div>
     </body>
 </html>

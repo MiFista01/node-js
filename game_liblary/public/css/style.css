@@ -1,15 +1,15 @@
 body{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 100vh;
     margin: 0;
     padding: 0;
     background-color: rgb(19, 19, 30);
     font-family: "VIDEOPHREAK";
     overflow: overlay;
 }
+::selection {
+    color: rgb(0, 0, 0);
+    background: rgb(255, 255, 255);
+}
+
 ::-webkit-scrollbar {
     width: 10px;
   }
@@ -30,6 +30,13 @@ background: rgb(38, 31, 56);
 }
 datalist::-webkit-scrollbar{
     display: none;
+}
+.main{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 100vh;
 }
 header{
     width: 100%;
@@ -161,23 +168,51 @@ main h1{
     flex-direction: column;
     justify-content: start;
     align-items: flex-start;
-    flex-wrap: wrap;
     width: 32%;
     border: 2px solid black;
     padding: 20px;
     box-sizing: border-box;
     background-color: rgba(0, 0, 0, 0.35);
     border-radius: 20px;
+    margin-bottom: 20px;
+    position: relative;
 }
 .game a{
     width: 100%;
 }
+.game p{
+    margin-bottom: 0px;
+}
 .game .game_img{
     width: 100%;
-    height: 40vw;
+    height: 35vw;
     background-size: cover;
     background-position: center;
     border-radius: 20px;
+}
+.delete_block{
+    display: flex;
+    justify-content: end;
+    margin-top: -15px;
+    margin-bottom: 10px;
+    position: relative;
+    width: 100%
+}
+.delete_block img{
+    width: 3vw;
+    cursor: pointer;
+    position: absolute;
+    bottom: -3vw;
+    right: -1vw;
+    display: none;
+    transition-duration: 0.2s;
+    border-radius: 100%;
+    background-color: rgb(18, 18, 18);
+    box-shadow: 0px 0px 15px 5px rgb(18, 18, 18);
+}
+.delete_block img:hover{
+    background-color: rgb(0, 0, 0);
+    box-shadow: 0px 0px 5px 5px rgb(0, 0, 0);
 }
 #form{
     width: 80%;
@@ -190,6 +225,7 @@ main h1{
     color: black;
     justify-content: space-between;
 }
+
 #form h2,#form h3{
     width: 100%;
     text-align: center;
@@ -197,7 +233,6 @@ main h1{
 }
 #form p, #form label{
     color: black;
-    user-select: none;
 }
 .image_input{
     width: 30vw;
@@ -208,7 +243,7 @@ main h1{
 }
 .image_input .image{
     width: 25vw;
-    height: 40vw;
+    height: 38vw;
     background-image: url("../imgs/add_image.svg");
     background-size: 80%;
     background-repeat: no-repeat;
@@ -244,8 +279,9 @@ main h1{
     padding: 5px;
     box-sizing: border-box;
 }
-.dates input[type="date"]{
-    user-select: none;
+input::selection, textarea::selection, input[type="date"]::selection{
+    color: rgb(255, 255, 255);
+    background: rgb(0, 0, 0);
 }
 #form textarea{
     resize: none;
@@ -427,11 +463,18 @@ main h1{
 }
 .search{
     width: 95%;
+    flex-grow: 1;
+}
+.search h1{
+    width: 100%;
+    color: white;
+    text-align: center;
+    font-size: 40px;
 }
 .search_block{
     position: fixed;
     background-color: rgb(35, 33, 44);
-    width: 20vw;
+    width: 25vw;
     height: max-content;
     z-index: 10;
     right: 1vw;
@@ -448,7 +491,7 @@ main h1{
 .draggeble{
     background-color: rgb(45, 44, 62);
     width: 80%;
-    cursor: move;
+    cursor: grab;
     flex-grow: 1;
     transition-duration: 0.2s;
 }
@@ -486,17 +529,137 @@ main h1{
     display: flex;
     justify-content: space-between;
     margin-top: 2px;
+    align-items: center;
 }
-.search_inputs input,.search_inputs button{
+.search_block .date input{
+    width: 31.5%;}
+.search_inputs input,.search_inputs button,.search_inputs select{
     font-family: "VIDEOPHREAK";
 }
 .search_inputs input{
-    width: 48%;
+    width: 48.5%;
     margin: 0;
     padding: 0;
 }
 .search_inputs button{
     margin-top: 5px;
+}
+.search_inputs p{
+    margin: 0;
+    padding: 0;
+    flex-grow: 1;
+    color: white;
+    margin-left: 10px;
+}
+.trash_objs{
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    width: 95%;
+    flex-grow: 1;
+}
+.trash_objs main{
+    width: 80%;
+}
+.trash_objs main h1{
+    width: 100%;
+    text-align: center;
+    font-size: 40px;
+    margin: 10px;
+}
+.trash_objs aside{
+    width: 18%;
+    max-height: 100vh;
+    border: 2px solid black;
+    background-color: rgba(0, 0, 0, 0.35);
+    border-radius: 20px;
+    position: sticky;
+    top: 10px;
+    color: white;
+}
+.trash_objs .trash_others{
+    max-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.trash{
+    overflow-y: scroll;
+    flex-grow: 1;
+    width: 100%;
+    border: 2px solid rgba(245, 245, 245, 0.151);
+}
+.trash::-webkit-scrollbar {
+    display: none;
+  }
+.trash_row{
+    display: flex;
+    flex-direction: row-reverse;
+    position: relative;
+    flex-wrap: wrap;
+    width: 100%;
+    transition-duration: 0.2s;
+    padding: 0px 0px;
+    box-sizing: border-box;
+}
+.trash_row:hover{
+    background-color: rgba(255, 255, 255, 0.189);
+}
+.trash_objs .buttons_block{
+    display: flex;
+    width: 35%;
+    justify-content: end;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.trash_objs h3{
+    margin-top: 5px;
+}
+.trash_objs p{
+    margin-left: 10px;
+    flex-grow: 1;
+}
+.trash_row .buttons_block img{
+    width: 35%;
+    cursor: pointer;
+    margin-right: 10px;
+    background: none;
+    box-shadow: none;
+}
+ .buttons_block img:hover{
+
+}
+.game .buttons_block{
+    position: absolute;
+    width: 95%;
+    /* display: none; */
+}
+.game .buttons_block img{
+    height: 3vw;
+    cursor: pointer;
+    float: right;
+    margin-right: 20px;
+}
+.restore{
+    background-color: rgba(3, 69, 15, 0.776);
+    box-shadow: 0px 0px 5px 5px rgba(3, 69, 15, 0.776);
+    transition-duration: 0.2s;
+    border-radius: 100%;
+}
+.restore:hover{
+    background-color: rgba(5, 113, 25, 0.776);
+    box-shadow: 0px 0px 5px 5px rgba(5, 113, 25, 0.776);
+}
+.full_delete{
+    background-color: rgba(69, 3, 3, 0.776);
+    box-shadow: 0px 0px 5px 5px rgba(69, 3, 3, 0.776);
+    transition-duration: 0.2s;
+    border-radius: 100%;
+}
+.full_delete:hover{
+    background-color: rgba(113, 5, 5, 0.776);
+    box-shadow: 0px 0px 5px 5px rgba(113, 5, 5, 0.776);
 }
 footer{
     width: 100%;

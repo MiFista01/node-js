@@ -145,12 +145,13 @@ function addClick(obj){
 function addDelete(obj){
     $(obj).click(function (e) { 
         e.preventDefault();
-        let id = $($($(this).parent()).prev()).attr("id");
+        let index = $($($(this).parent()).prev()).attr("id");
         let btn = this
+        console.log($(btn).attr("obj"))
         $.ajax({
             type: "post",
-            url: "/drop_genre",
-            data: {id:id},
+            url: "/drop_gen_plat",
+            data: {index:index, obj:$(btn).attr("obj")},
             dataType: "json",
             success: function (response) {
                 if(response.status = 1){
@@ -167,7 +168,6 @@ function showForm(obj) {
     });
 }
 function update(form_upd) {
-    console.log(form_upd)
     $(form_upd).submit(function (e) { 
         e.preventDefault();
         let form = this

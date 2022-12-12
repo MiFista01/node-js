@@ -128,7 +128,39 @@ app.get('/search_page', async function(req, res){
     })
     let genres = await Genre.findAll({attributes: ['name']})
     let platforms = await Platform.findAll({attributes: ['name']})
-    res.render('pages/page_search', {games:games, titles, issuers, developers, genres, platforms})
+    res.render('pages/page_search', {games:games, titles, issuers, developers, genres, platforms, read:false})
+})
+
+app.get('/trash_page', async function(req, res){
+    let trash_games = await Game.findAll({where:{destroyTime:{[Op.not]:null}},paranoid:false})
+    let games = []
+    for(let i of trash_games){
+        let game = {}
+        game.prime = i
+        let genres = []
+        let game_genre = await GameGenre.findAll({where:{id_game:i.id}})
+        for (let j of game_genre){
+            let genre = await Genre.findOne({where:{id:j.id_genre}})
+            if(genre != null){
+                genres.push(genre.name)
+            }
+        }
+        game.genres = genres
+        let platforms = []
+        let game_platforms = await GamePlatform.findAll({where:{id_game:i.id}})
+        for (let j of game_platforms){
+            let platform = await Platform.findOne({where:{id:j.id_platform}})
+            if(platform != null){
+                platforms.push(platform.name)
+            }
+        }
+        game.platforms = platforms
+        games.push(game)
+    };
+    
+    let trash_genres = await Genre.findAll({where:{destroyTime:{[Op.not]:null}},paranoid:false})
+    let trash_platforms = await Platform.findAll({where:{destroyTime:{[Op.not]:null}},paranoid:false})
+    res.render('pages/page_trash',{games, trash_genres, trash_platforms, read:false})
 })
 // ==============================routes=============================
 
@@ -138,10 +170,20 @@ app.post("/datalists",async function(req,res){
     let platforms = await Platform.findAll()
     res.send({genres:genres, platforms:platforms})
 })
-app.post("/drop_genre",async function(req,res){
-   Genre.destroy({where:req.body})
-   res.send({status:1})
+app.post("/drop_gen_plat",async function(req,res){
+    if(req.body.obj == "genre"){
+        Genre.destroy({where:{id:req.body.index}})
+        res.send({status:1})
+    }
+    if(req.body.obj == "platform"){
+        Platform.destroy({where:{id:req.body.index}})
+        res.send({status:1})
+    }
 })
+app.post("/drop_game",async function(req,res){
+    Game.destroy({where:req.body})
+    res.send({status:1})
+ })
 app.post("/updater",async function(req,res){
     if(req.body.obj == "genre"){
         try {
@@ -219,6 +261,152 @@ app.post("/updater",async function(req,res){
         
     }
  })
+ var data_games = []
+ app.post("/search_game",async function(req,res){
+    data_games = []
+    let id_genres = []
+    let id_platforms = []
+    let genres = await Genre.findAll({attributes: ['id'], where:{name:{[Op.substring]: req.body.genre}}})
+    let platforms = await Platform.findAll({attributes: ['id'], where:{name:{[Op.substring]: req.body.platform}}})
+    let id_game_genre = []
+    let id_game_platform = []
+    let id_games = []
+    if(isIterable(genres)){
+        genres.forEach(element => {
+            id_genres.push(element.id)
+        });
+    }
+    if(isIterable(platforms)){
+        platforms.forEach(element => {
+            id_platforms.push(element.id)
+        });
+    }
+    if(id_genres.length >0 && isIterable(id_genres)){
+        for(let i of id_genres){
+            let game_genre = await GameGenre.findAll({attributes: ['id_game'],where:{id_genre:i}})
+            for(let j of game_genre){
+                if(!id_game_genre.includes(j.id_game)){
+                    id_game_genre.push(j.id_game)
+                }
+            }
+        }
+    }
+    if(id_platforms.length >0 && isIterable(id_platforms)){
+        for(let i of id_platforms){
+            let game_platform = await GamePlatform.findAll({attributes: ['id_game'],where:{id_platform:i}})
+            for(let j of game_platform){
+                if(!id_game_platform.includes(j.id_game)){
+                    id_game_platform.push(j.id_game)
+                }
+            }
+        }
+    }
+    if((isIterable(id_game_genre) && id_game_genre.length>0) && (isIterable(id_game_platform) && id_game_platform.length>0)){
+        for(let i of id_game_genre){
+            for(let j of id_game_platform){
+                if(i == j && !id_games.includes(i)){
+                    id_games.push(i)
+                }
+            }
+        }
+    }else{
+        for(let i of id_game_genre){
+            if( !id_games.includes(i)){
+                id_games.push(i)
+            }
+        }
+        for(let i of id_game_platform){
+            if( !id_games.includes(i)){
+                id_games.push(i)
+            }
+        }
+    }
+    if(req.body.title == undefined){
+        req.body.title = ""
+    }
+    if(req.body.issuer == undefined){
+        req.body.issuer = ""
+    }
+    if(req.body.developer == undefined){
+        req.body.developer = ""
+    }
+    let data_find = {where:{
+        title:{[Op.substring]: req.body.title},
+        issuer:{[Op.substring]: req.body.issuer},
+        developer:{[Op.substring]: req.body.developer},
+        },order:[["id",req.body.asc_desc]]}
+
+    if(id_games.length >0){
+        data_find.where.id = id_games
+    }
+    let games = await Game.findAll(data_find)
+    
+    for(let i of games){
+        let game = {}
+        let prime = i
+        let game_genre = await GameGenre.findAll({where:{id_game:i.id}})
+        let genres = []
+        for(let j of game_genre){
+            let genre = await Genre.findOne({where:{id:j.id_genre}})
+            console.log(game_genre)
+            genres.push(genre.name)
+        }
+        let game_platforms = await GamePlatform.findAll({where:{id_game:i.id}})
+        let platforms = []
+        for(let j of game_platforms){
+            let platfrom = await Platform.findOne({where:{id:j.id_platform}})
+            platforms.push(platfrom.name)
+        }
+        game.prime = prime
+        game.genres = genres
+        game.platforms = platforms
+        data_games.push(game)
+    }
+    res.send({status: 1, size:data_games.length})
+ })
+ app.post("/get_game",async function(req,res){
+    if(data_games[req.body.index] != undefined){
+        let game = data_games[req.body.index]
+        let buf = Buffer.from(game.prime.img)
+        game.prime.img =  buf.toString("utf8")
+        res.send({status:1, game:game, read:false})
+    }else{
+        res.send({status:0})
+    }
+   
+ })
+ app.post("/restore",async function(req,res){
+    if(req.body.obj == "game"){
+        Game.restore({where:{id:req.body.index}})
+        res.send({status:1})
+    }
+    if(req.body.obj == "genre"){
+        Genre.restore({where:{id:req.body.index}})
+        res.send({status:1})
+    }
+    if(req.body.obj == "platform"){
+        Platform.restore({where:{id:req.body.index}})
+        res.send({status:1})
+    }
+ })
+ app.post("/full_delete",async function(req,res){
+    if(req.body.obj == "game"){
+        Game.destroy({where:{id:req.body.index},force:true})
+        GameGenre.destroy({where:{id_game:req.body.index}})
+        GamePlatform.destroy({where:{id_platform:req.body.index}})
+        res.send({status:1})
+    }
+    if(req.body.obj == "genre"){
+        Genre.destroy({where:{id:req.body.index},force:true})
+        res.send({status:1})
+        GameGenre.destroy({where:{id_genre:req.body.index}})
+    }
+    if(req.body.obj == "platform"){
+        Platform.destroy({where:{id:req.body.index},force:true})
+        GamePlatform.destroy({where:{id_platform:req.body.index}})
+        res.send({status:1})
+    }
+ })
 // ==============================send data===============================
 
 
@@ -237,7 +425,6 @@ app.post("/create_game", async function(req, res){
         }
         
         if(isIterable(req.body.platforms)){
-            console.log(req.body.platforms)
             for(let i of req.body.platforms){
                 let platform = await Platform.findOrCreate({where:{name:i}})
                 GamePlatform.findOrCreate({where:{id_game:game.id,id_platform:platform[0].id}})

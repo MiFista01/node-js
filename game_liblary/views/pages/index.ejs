@@ -4,62 +4,62 @@
         <%- include('../partials/head'); %>
     </head>
     <body class="">
-
-        <header>
-            <%- include('../partials/header'); %>
-        </header>
-        <div class="wrapper">
-            <aside class="news">
-                <h2>Last Game News</h2>
-                <% news.forEach(element => { %>
-                    <div class="news_block">
-                        <h4><%=element.title.substring(0, 25)%>...</h4>
-                        <p><%=element.text.substring(0, 100)%>...</p>
-                        <a href="<%=element.link%>">Link to original</a>
-                    </div>
-                <% }) %>
-            </aside>
-            <main>
-                <h1>Last added to the database</h1>
-                <% games.forEach(game => { %>
-                    <div class="game">
-                        <a href="game/<%=game.prime.id%>">
-                            <div class="game_img" style="background-image: url(<%=game.prime.img%>);">
-    
-                            </div>
-                        </a>
-                        
-                        <div class="info">
-                            <h2><%=game.prime.title%></h2>
-                            <p><span>Publieshed date:</span> <%=game.prime.published_date%></p>
-                            <p><span>Issuer:</span> <%=game.prime.issuer%></p>
-                            <p><span>Developer:</span> <%=game.prime.developer%></p>
-                            <p><span>Genres:</span> 
-                                <% game.genres.forEach(genre => { %>
-                                    <% if (genre!= game.genres[game.genres.length-1]) { %>
-                                        <%=genre%>/
-                                    <% } else{%>
-                                        <%=genre%>
-                                    <%}%>
-                            <% }) %></p>
-                            <p><span>Platforms:</span> 
-                                <% game.platforms.forEach(platform => { %>
-                                    <% if (platform!= game.platforms[game.platforms.length-1]) { %>
-                                        <%=platform%>/
-                                    <% } else{%>
-                                        <%=platform%>
-                                    <%}%>
-                            <% }) %>
-                            </p>
-                            <p><span>Description:</span> <%=game.prime.description.substring(0, 100)%>...</p>
+        <div class="main">
+            <header>
+                <%- include('../partials/header'); %>
+            </header>
+            <div class="wrapper">
+                <aside class="news">
+                    <h2>Last Game News</h2>
+                    <% news.forEach(element => { %>
+                        <div class="news_block">
+                            <h4><%=element.title.substring(0, 25)%>...</h4>
+                            <p><%=element.text.substring(0, 100)%>...</p>
+                            <a href="<%=element.link%>">Link to original</a>
                         </div>
-                    </div>
-                <% }) %>
-            </main>
+                    <% }) %>
+                </aside>
+                <main>
+                    <h1>Last added to the database</h1>
+                    <% games.forEach(game => { %>
+                        <div class="game">
+                            <a href="game/<%=game.prime.id%>">
+                                <div class="game_img" style="background-image: url(<%=game.prime.img%>);">
+        
+                                </div>
+                            </a>
+                            
+                            <div class="info">
+                                <h2><%=game.prime.title%></h2>
+                                <p><span>Publieshed date:</span> <%=game.prime.published_date%></p>
+                                <p><span>Issuer:</span> <%=game.prime.issuer%></p>
+                                <p><span>Developer:</span> <%=game.prime.developer%></p>
+                                <p><span>Genres:</span> 
+                                    <% game.genres.forEach(genre => { %>
+                                        <% if (genre!= game.genres[game.genres.length-1]) { %>
+                                            <%=genre%>/
+                                        <% } else{%>
+                                            <%=genre%>
+                                        <%}%>
+                                <% }) %></p>
+                                <p><span>Platforms:</span> 
+                                    <% game.platforms.forEach(platform => { %>
+                                        <% if (platform!= game.platforms[game.platforms.length-1]) { %>
+                                            <%=platform%>/
+                                        <% } else{%>
+                                            <%=platform%>
+                                        <%}%>
+                                <% }) %>
+                                </p>
+                                <p><span>Description:</span> <%=game.prime.description.substring(0, 100)%>...</p>
+                            </div>
+                        </div>
+                    <% }) %>
+                </main>
+            </div>
+            <footer>
+                <%- include('../partials/footer'); %>
+            </footer>
         </div>
-        <footer>
-            <%- include('../partials/footer'); %>
-        </footer>
-
     </body>
 </html>

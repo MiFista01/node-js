@@ -12,3 +12,10 @@
     <p style="color: white;">bhjhbjbbbvbnbbhj</p>
 </body>
 </html>
+<% if (element.issuer.split("/").length >0) { %>
+    <% element.issuer.split("/").forEach(element2 => { %>
+        <option value="<%=element2.issuer%>"><%=element2.issuer%></option>
+    <% }) %>
+<% }else{ %>
+    <option value="<%=element.issuer%>"><%=element.issuer%></option>
+<%}%>
