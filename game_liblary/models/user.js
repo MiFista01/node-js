@@ -1,7 +1,7 @@
 const db = require('../connection/database')
 const {DataTypes, Model} =  require('sequelize')
-class Game extends Model{}
-Game.init({
+class User extends Model{}
+User.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -12,23 +12,21 @@ Game.init({
     name: {
         type: DataTypes.STRING
     },
+    email: {
+        type: DataTypes.STRING
+    },
     password:{
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
     },
-    issuer:{
-        type: DataTypes.STRING
+    salt:{
+        type: DataTypes.STRING,
     },
-    developer:{
-        type: DataTypes.STRING
-    },
-    description:{
-        type: DataTypes.STRING
-    },
-    img:{
-        type: DataTypes.BLOB("long")
+    role:{
+        type: DataTypes.STRING,
     }
 },{
     sequelize:db,
     timestamps: false,
-    modelName: 'game'
+    modelName: 'user'
 })
+module.exports = User

@@ -1,12 +1,62 @@
 $(document).ready(function () {
-    $(".hide").slideUp(0);
-    $(".game").hover(function () {
-            $($(this).children()[0]).slideDown(200);
-        }, function () {
-            $($(this).children()[0]).slideUp(200);
+    $(".buttons_block").slideUp(0);
+    $("#form_search").submit(function (e) { 
+        e.preventDefault();
+        let send_data = {}
+        let form = this;
+        for(let i of $("#form_search :input")){
+            if(i.name != "asc_desc" && i.value != ""){
+                send_data[i.name] = i.value
+            }
         }
-    );
-    $(".restore").click(function (e) { 
+        send_data.page = "trash"
+        send_data.asc_desc = form.asc_desc.value
+        $("main").slideUp(200,function () {
+            $("main").empty();
+            $.ajax({
+                type: "post",
+                url: "/search_game",
+                data: send_data,
+                dataType: "json",
+                success: async function (response) {
+                    if(response.status == 1){
+                        $("main").slideDown(200)
+                        const size = response.size
+                        $("#result").text("Result: "+size);
+                        for(let i = 0; i< size;i++){
+                                let game = await $.ajax({
+                                type: "post",
+                                url: "/get_game",
+                                data: {index:i, page:"trash"},
+                                dataType: "html",
+                                success: async function (response) {
+                                    $("main").append(response);
+                                    showButton(".game")
+                                    restore(".restore")
+                                    fullDelete(".full_delete")
+                                }
+                            }); 
+                        }
+                        $(".buttons_block").slideUp(0);
+                    }
+                }
+            });
+        });
+    });
+    showButton(".game")
+    restore(".restore")
+    fullDelete(".full_delete")
+});
+function showButton(obj) {
+    $(obj).hover(function () {
+        $($(this).children()[0]).slideDown(200);
+    }, function () {
+        $($(this).children()[0]).slideUp(200);
+    }
+);
+}
+function restore(obj){
+    $(obj).click(function (e) { 
         e.preventDefault();
         let btn = this
         $.ajax({
@@ -23,7 +73,9 @@ $(document).ready(function () {
             }
         });
     });
-    $(".full_delete").click(function (e) { 
+}
+function fullDelete(obj) {
+    $(obj).click(function (e) { 
         e.preventDefault();
         let btn = this
         $.ajax({
@@ -40,4 +92,4 @@ $(document).ready(function () {
             }
         });
     });
-});
+}

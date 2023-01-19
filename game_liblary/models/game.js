@@ -25,7 +25,7 @@ Game.init({
         type: DataTypes.TEXT
     },
     img:{
-        type: DataTypes.TEXT 
+        type: DataTypes.BLOB('long')
     }
 },{
     sequelize:db,

@@ -6,14 +6,17 @@ const Platform = require("./models/platform")
 const GameGenre = require("./models/gameGenre")
 const GamePlatform = require("./models/gamePlatform")
 const News = require("./models/news")
+const User = require("./models/user")
 db.sync()
+
 var express = require("express")
 var app = express()
+var bcrypt = require('bcrypt');
 
 // ===================settings============================
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 app.use(bodyParser.json({limit: "4000mb"}));
 app.use(bodyParser.urlencoded({limit: "4000mb", extended: true, parameterLimit:5000000}));
 // ===================settings============================
@@ -91,7 +94,7 @@ app.get('/game/:id', async function(req, res){
 app.get('/search_page', async function(req, res){
     let games_prime = await Game.findAll({where:{ title: {[Op.substring]: ""}},order:[["id","ASC"]]})
     let games = []
-    for(let i of games_prime){
+    for(let i of games_prime){ 
         let game = {}
         game.prime = i
         let game_genres = await GameGenre.findAll({where:{id_game:i.id}})
@@ -133,7 +136,7 @@ app.get('/search_page', async function(req, res){
 
 app.get('/trash_page', async function(req, res){
     let trash_games = await Game.findAll({where:{destroyTime:{[Op.not]:null}},paranoid:false})
-    let games = []
+    let deleted_games = []
     for(let i of trash_games){
         let game = {}
         game.prime = i
@@ -155,12 +158,26 @@ app.get('/trash_page', async function(req, res){
             }
         }
         game.platforms = platforms
-        games.push(game)
+        deleted_games.push(game)
     };
     
     let trash_genres = await Genre.findAll({where:{destroyTime:{[Op.not]:null}},paranoid:false})
-    let trash_platforms = await Platform.findAll({where:{destroyTime:{[Op.not]:null}},paranoid:false})
-    res.render('pages/page_trash',{games, trash_genres, trash_platforms, read:false})
+    let trash_platforms = await Platform.findAll({where:{destroyTime:{[Op.not]:null}},paranoid:false})    
+    let titles = await Game.findAll({where:{destroyTime:{[Op.not]:null}},paranoid:false,
+        attributes: ['title'],
+        distinct: true
+    })
+    let issuers = await Game.findAll({where:{destroyTime:{[Op.not]:null}},paranoid:false,
+        attributes: ['issuer'],
+        distinct: true
+    })
+    let developers = await Game.findAll({where:{destroyTime:{[Op.not]:null}},paranoid:false,
+        attributes: ['developer'],
+        distinct: true
+    })
+    let genres = await Genre.findAll({attributes: ['name']})
+    let platforms = await Platform.findAll({attributes: ['name']})
+    res.render('pages/page_trash',{deleted_games, trash_genres, trash_platforms,titles, issuers, developers, genres, platforms, read:false})
 })
 // ==============================routes=============================
 
@@ -266,8 +283,16 @@ app.post("/updater",async function(req,res){
     data_games = []
     let id_genres = []
     let id_platforms = []
-    let genres = await Genre.findAll({attributes: ['id'], where:{name:{[Op.substring]: req.body.genre}}})
-    let platforms = await Platform.findAll({attributes: ['id'], where:{name:{[Op.substring]: req.body.platform}}})
+    let genre = req.body.genre
+    let platform = req.body.platform
+    if(req.body.genre = undefined){
+        genre = ""
+    }
+    if(req.body.platform = undefined){
+        platform = "" 
+    }
+    let genres = await Genre.findAll({attributes: ['id'], where:{name:{[Op.substring]: genre}}})
+    let platforms = await Platform.findAll({attributes: ['id'], where:{name:{[Op.substring]: platform}}})
     let id_game_genre = []
     let id_game_platform = []
     let id_games = []
@@ -330,17 +355,19 @@ app.post("/updater",async function(req,res){
     if(req.body.developer == undefined){
         req.body.developer = ""
     }
-    let data_find = {where:{
+    let data_find = {where:{ 
         title:{[Op.substring]: req.body.title},
         issuer:{[Op.substring]: req.body.issuer},
-        developer:{[Op.substring]: req.body.developer},
-        },order:[["id",req.body.asc_desc]]}
-
+        developer:{[Op.substring]: req.body.developer}},
+        order:[["id",req.body.asc_desc]]}
+    if(req.body.page != undefined && req.body.page == "trash"){
+        data_find.where.destroyTime = {[Op.not]:null}
+        data_find.paranoid = false
+    }
     if(id_games.length >0){
         data_find.where.id = id_games
     }
     let games = await Game.findAll(data_find)
-    
     for(let i of games){
         let game = {}
         let prime = i
@@ -348,7 +375,6 @@ app.post("/updater",async function(req,res){
         let genres = []
         for(let j of game_genre){
             let genre = await Genre.findOne({where:{id:j.id_genre}})
-            console.log(game_genre)
             genres.push(genre.name)
         }
         let game_platforms = await GamePlatform.findAll({where:{id_game:i.id}})
@@ -362,6 +388,7 @@ app.post("/updater",async function(req,res){
         game.platforms = platforms
         data_games.push(game)
     }
+    console.log(data_games)
     res.send({status: 1, size:data_games.length})
  })
  app.post("/get_game",async function(req,res){
@@ -369,7 +396,12 @@ app.post("/updater",async function(req,res){
         let game = data_games[req.body.index]
         let buf = Buffer.from(game.prime.img)
         game.prime.img =  buf.toString("utf8")
-        res.send({status:1, game:game, read:false})
+        if(req.body.page == "search"){
+            res.render('partials/search_render', {games:[game], read:false})
+        }
+        if(req.body.page == "trash"){
+            res.render('partials/trash_render', {deleted_games:[game], read:false})
+        }
     }else{
         res.send({status:0})
     }
@@ -465,6 +497,28 @@ app.post("/create_platform", async function(req, res){
     }
    
 })
+// app.post("/create_user", async function(req, res){
+//     var salt = bcrypt.genSaltSync(10);
+//     var passwordToSave = bcrypt.hashSync(req.body.password, salt)
+//     let user_name = await User.findOne({where:{name:req.body.name}})
+//     let user_email = await User.findOne({where:{email:req.body.email}})
+//     if(user_name == null && user_email == null){
+//         User.create({name:req.body.name, password:passwordToSave, email: req.body.email, salt:salt, role:"reader"})
+//         res.send({status:1})
+//     }else{
+//         res.send({status:0})
+//     }
+// })
+// app.post("/login", async function(req, res){
+//     let user = await User.findOne({where:{name:req.body.name}})
+//     if(user != null){
+//         let convertPassword = bcrypt.hashSync(req.body.password, user.salt)
+//         if(convertPassword == user.password){
+            // req.session.key = req.sessionID
+//             res.send({status:1})
+//         }
+//     }
+// })
 // ================================creat obj================================
 app.listen(3000);
 
