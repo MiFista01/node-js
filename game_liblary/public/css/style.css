@@ -148,6 +148,18 @@ header ul li {
     box-sizing:border-box;
     padding:10px;
 }
+.key_worlds{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin: 10px 0px;
+}
+.key_worlds div >p{
+    margin:0;
+}
+.key_worlds .checkboxes{
+    flex-grow: 1;
+}
 main {
     width:85%;
     display:flex;

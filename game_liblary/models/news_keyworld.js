@@ -1,30 +1,30 @@
 const db = require('../connection/database')
 const {DataTypes, Model} =  require('sequelize')
-class GamePlatforms extends Model{}
-GamePlatforms.init({
+class NewsGamePlatforms extends Model{}
+NewsGamePlatforms.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false
     },
-    id_game: {
+    id_news: {
         type: DataTypes.INTEGER,
         references:{
-            model: "games",
+            model: "news",
             key:"id"
         }
     },
-    id_platform: {
+    id_keyworld: {
         type: DataTypes.INTEGER,
         references:{
-            model: "platforms",
+            model: "keywords",
             key:"id"
         }
     }
 },{
     sequelize:db,
     timestamps: false,
-    modelName: 'game_platform'
+    modelName: 'news_keywordls'
 })
-module.exports = GamePlatforms
+module.exports = NewsGamePlatforms

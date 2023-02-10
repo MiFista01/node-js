@@ -6,13 +6,13 @@ const Platform = require("./models/platform")
 const GameGenre = require("./models/gameGenre")
 const GamePlatform = require("./models/gamePlatform")
 const News = require("./models/news")
-const User = require("./models/user")
-db.sync()
+const KeyWorlds = require("./models/key_worlds")
+const NewsKeyWorlds = require("./models/news_keyworld")
+// db.sync({force:true})
 
 var express = require("express")
 var app = express()
 var bcrypt = require('bcrypt');
-
 // ===================settings============================
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
@@ -56,8 +56,9 @@ app.get('/form_game', async function(req, res){
     let all_developers = await Game.findAll({attributes: ['developer'],distinct: 'Developer'})
     res.render('pages/form_game',{all_issuers, all_developers})
 })
-app.get('/form_news', (req, res) => {
-    res.render('pages/form_news')
+app.get('/form_news',async (req, res) => {
+    let worlds = await KeyWorlds.findAll({attributes: ['text']})
+    res.render('pages/form_news',{worlds: worlds})
 })
 app.get('/genre_platform', async function(req, res){
     let genres = await Genre.findAll()
@@ -178,6 +179,10 @@ app.get('/trash_page', async function(req, res){
     let genres = await Genre.findAll({attributes: ['name']})
     let platforms = await Platform.findAll({attributes: ['name']})
     res.render('pages/page_trash',{deleted_games, trash_genres, trash_platforms,titles, issuers, developers, genres, platforms, read:false})
+})
+app.get('/news_pages', async function(req, res){
+    
+    res.render('pages/genre_platform',{genres:genres, platforms:platforms})
 })
 // ==============================routes=============================
 
@@ -439,6 +444,10 @@ app.post("/updater",async function(req,res){
         res.send({status:1})
     }
  })
+ app.post("/get_keywords",async function(req,res){
+    let keywords = await KeyWorlds.findAll({attributes:["text"]})
+    res.send({keywords: keywords})
+ })
 // ==============================send data===============================
 
 
@@ -447,7 +456,7 @@ app.post("/create_game", async function(req, res){
     try {
         let game_data = JSON.parse(JSON.stringify(req.body))
         delete game_data.genres
-        delete game_data.platforms
+        delete game_data.platforms 
         let game = await Game.create(game_data)
         if(isIterable(req.body.genres)){
             for(let i of req.body.genres){
@@ -471,7 +480,16 @@ app.post("/create_game", async function(req, res){
 })
 app.post("/create_news", async function(req, res){
     try {
-        News.create(req.body)
+        let news_data = JSON.parse(JSON.stringify(req.body))
+        delete news_data.worlds
+        let news = await News.create(news_data)
+        if (req.body.worlds.length != 0){
+            for(i of req.body.worlds){
+                let keyworld = await KeyWorlds.findOrCreate({where: { text: i }, defaults: {text: i}})
+                console.log(keyworld[0].id)
+                let news_world = await NewsKeyWorlds.findOrCreate({where: {id_news: news.id, id_keyworld: keyworld[0].id}, defaults: {id_news: news.id, id_keyworld: keyworld[0].id}})
+            }
+        }
         res.send({status:1})
     } catch (error) {
         res.send({status:0})

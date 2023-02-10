@@ -6,14 +6,21 @@ GameGenre.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        allowNull: false,
-        fields: "id"
+        allowNull: false
     },
     id_game: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        references:{
+            model: "games",
+            key:"id"
+        }
     },
     id_genre: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        references:{
+            model: "genres",
+            key:"id"
+        }
     }
 },{
     sequelize:db,

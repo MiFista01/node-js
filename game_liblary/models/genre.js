@@ -6,15 +6,14 @@ Genre.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        allowNull: false,
-        fields: "id"
+        allowNull: false
     },
     name: {
         type: DataTypes.STRING
     }
-},{ modelName: 'genre',
-    sequelize:db,
+},{ sequelize:db,
     paranoid: true,
-    deletedAt: 'destroyTime'
+    deletedAt: 'destroyTime',
+    modelName: 'genres'
 })
 module.exports = Genre

@@ -6,8 +6,7 @@ Game.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        allowNull: false,
-        fields: "id"
+        allowNull: false
     },
     title: {
         type: DataTypes.STRING
@@ -27,10 +26,11 @@ Game.init({
     img:{
         type: DataTypes.BLOB('long')
     }
-},{
+},
+{
     sequelize:db,
     paranoid: true,
     deletedAt: 'destroyTime',
-    modelName: 'game'
+    modelName: 'games'
 })
 module.exports = Game

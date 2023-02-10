@@ -54,7 +54,6 @@ $(document).ready(function () {
                     platforms},
                 dataType: "json",
                 success: function (response) {
-                    console.log(response)
                     if(response.status == 1){
                         form.title.value = null
                         form.date.value = null
@@ -81,7 +80,7 @@ $(document).ready(function () {
         }
         
     });
-    $("#add_genre").click(function (e) { 
+    $("#add_worlds").click(function (e) { 
         e.preventDefault();
         if ($("#genre").val() != "" && $("#genre").val() != null){
             let div = document.createElement("div")
