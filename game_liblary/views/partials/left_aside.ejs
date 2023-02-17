@@ -1,0 +1,10 @@
+<aside class="news">
+    <h2>Last Game News</h2>
+    <% news.forEach(element => { %>
+        <div class="news_block">
+            <h4><%=element.title.substring(0, 25)%>...</h4>
+            <p><%=element.text.substring(0, 100)%>...</p>
+            <a href="<%=element.link%>">Link to original</a>
+        </div>
+    <% }) %>
+</aside>

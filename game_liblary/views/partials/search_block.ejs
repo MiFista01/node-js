@@ -1,0 +1,54 @@
+<div class="search_block">
+    <div class="ui"><div class="draggeble"><p>. . .</p></div> <img src="imgs/arrow_slide.png" alt="" id="slide"></div>
+    <form id="form_search">
+        <div class="search_inputs">
+            <div>
+                <input type="text" name="title" autocomplete="off" placeholder="Name"list="titles">
+                <datalist id="titles">
+                    <% titles.forEach(element => { %>
+                     <option value="<%=element.title%>"></option>
+                    <% }) %>
+                </datalist>
+                <select name="asc_desc" id="">
+                    <option value="ASC" selected>ASC</option>
+                    <option value="DESC">DESC</option>
+                </select>
+            </div>
+            <div>
+                <input type="text" name="issuer" autocomplete="off" placeholder="Issuer" list="issuers">
+                <datalist id="issuers">
+                    <% issuers.forEach(element => { %>
+                     <option value="<%=element.issuer%>"></option>
+                    <% }) %>
+                </datalist>
+                <input type="text" name="developer" autocomplete="off" placeholder="Developer" list="developers">
+                <datalist id="developers">
+                    <% developers.forEach(element => { %>
+                     <option value="<%=element.developer%>"></option>
+                    <% }) %>
+                </datalist>
+            </div>
+            <div>
+                <input type="text" name="genre" autocomplete="off" placeholder="Genre" list="genres">
+                <datalist id="genres">
+                    <% genres.forEach(element => { %>
+                     <option value="<%=element.name%>"></option>
+                    <% }) %>
+                </datalist>
+                <input type="text" name="platform" autocomplete="off" placeholder="Platform" list="platforms">
+                <datalist id="platforms">
+                    <% platforms.forEach(element => { %>
+                     <option value="<%=element.name%>"></option>
+                    <% }) %>
+                </datalist>
+            </div>
+            <div class="date">
+                <input type="number" min="1900" name="year"  autocomplete="off" placeholder="Year">
+            </div>
+            <div>
+                <button>Search</button>
+                <p id="result"></p>
+            </div>
+        </div>
+    </form>
+</div>

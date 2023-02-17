@@ -24,13 +24,6 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background:#261f38;
 }
-.main {
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    align-items:center;
-    min-height:100vh;
-}
 header {
     width:100%;
     box-sizing:border-box;
@@ -117,13 +110,19 @@ header ul li {
     margin:0 40px 0 0;
 }
 .wrapper {
-    width:99%;
+    width:100%;
+    min-height: 100vh;
     display:flex;
-    flex-direction:row;
+    flex-direction:column;
     justify-content:space-between;
-    align-items:flex-start;
+    align-items:stretch;
     color:#FFF;
-    flex-grow:1;
+}
+.content{
+    width:100%;
+    display: flex;
+    justify-content:space-between;
+    flex-grow: 1;
 }
 .news {
     width:14%;
@@ -161,16 +160,77 @@ header ul li {
     flex-grow: 1;
 }
 main {
-    width:85%;
+    min-width: 85%;
     display:flex;
     justify-content:space-around;
     flex-wrap:wrap;
     color:#FFF;
+    flex-grow: 1;
+    align-items: baseline;
 }
 main h1 {
     width:100%;
     text-align:center;
     font-size:40px;
+    margin: 0;
+    padding:0;
+}
+.search_news{
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.search_news input{
+    width:80%;
+    background: none;
+    height: 5vmin;
+    color: white;
+    padding: 3px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-size: 3vmin;
+}
+.search_news button{
+    background: none;
+    border-radius: 100%;
+    border: none
+}
+.search_news img{
+    height:5vmin;
+    transform: scaleX(-1);
+    cursor: pointer;
+}
+.page_news{
+    width:100%;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    flex-wrap: wrap;
+}
+.page_news div{
+    width:20%;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction:row-reverse;
+}
+.page_news div h3, .page_news div p, .page_news div a{
+    width:100%;
+}
+.page_news div h3{
+    margin: 0;
+}
+.page_news div img{
+    height:0px;
+    position: absolute;
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+.page_news div:hover img{
+    height:5vmin;
 }
 .game {
     display:flex;

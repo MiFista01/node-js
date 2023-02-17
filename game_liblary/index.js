@@ -181,8 +181,23 @@ app.get('/trash_page', async function(req, res){
     res.render('pages/page_trash',{deleted_games, trash_genres, trash_platforms,titles, issuers, developers, genres, platforms, read:false})
 })
 app.get('/news_pages', async function(req, res){
-    
-    res.render('pages/genre_platform',{genres:genres, platforms:platforms})
+    let news = await News.findAll()
+    let keyworlds = await KeyWorlds.findAll()
+    let NewsKeys = []
+    for (i of news){
+        let news_keys = {}
+        news_keys.news = i
+        let keyworlds = []
+        let news_keyworlds = await NewsKeyWorlds.findAll({where:{id_news:i.id}})
+        for (j of news_keyworlds){
+            let keyworld = await KeyWorlds.findOne({where:{id:j.id_keyworld}})
+            keyworlds.push(keyworld.text)
+        }
+        news_keys.keyworlds = keyworlds
+        NewsKeys.push(news_keys)
+    }
+    console.log(NewsKeys)
+    res.render('pages/news_page',{NewsKeys:NewsKeys, keyworlds:keyworlds})
 })
 // ==============================routes=============================
 
@@ -444,7 +459,7 @@ app.post("/updater",async function(req,res){
         res.send({status:1})
     }
  })
- app.post("/get_keywords",async function(req,res){
+ app.post("/news",async function(req,res){
     let keywords = await KeyWorlds.findAll({attributes:["text"]})
     res.send({keywords: keywords})
  })

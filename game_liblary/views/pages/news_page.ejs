@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../partials/head'); %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <header>
+                <%- include('../partials/header'); %>
+            </header>
+            <main>
+                <form class="search_news">
+                    <input type="text" list="keys" autocomplete="off" placeholder="Search">
+                    <button><img src="imgs/search.png" alt=""></button>
+                    <datalist id="keys">
+                        <% keyworlds.forEach(element => { %>
+                         <option value="<%= element.text %>"></option>
+                        <% }) %>
+                    </datalist>
+                </form>
+                <div class="page_news">
+                    <% NewsKeys.forEach(element => { %>
+                     <div>
+                        <img id="<%= element.news.id %>" src="imgs/delete.png" alt="">
+                        <h3><%= element.news.title %></h3>
+                        <p><%= element.news.text.substring(0, 301)%>...</p>
+
+                        <a href="<%= element.news.link %>" target="_blank">Link to original</a>
+                     </div>
+                    <% }) %>
+                </div>
+            </main>
+            <footer>
+                <%- include('../partials/footer'); %>
+            </footer>
+            <script src="scripts/news_page.js"></script>
+        </div>
+    </body>
+</html>

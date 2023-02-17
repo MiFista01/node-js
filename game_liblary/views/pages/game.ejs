@@ -4,13 +4,11 @@
         <%- include('../partials/head'); %>
         <script src="../scripts/game.js"></script>
     </head>
-    <body class="">
-        <div class="main">
+    <body>
+        <div class="wrapper">
             <header>
                 <%- include('../partials/header'); %>
             </header>
-            <%- include('../partials/register_form'); %>
-            <%- include('../partials/login_form'); %>
             <main>
                 <% if (read == false) { %>
                     <form id="form" method="POST">
