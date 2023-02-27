@@ -196,9 +196,9 @@ app.get('/news_pages', async function(req, res){
         news_keys.keyworlds = keyworlds
         NewsKeys.push(news_keys)
     }
-    console.log(NewsKeys)
     res.render('pages/news_page',{NewsKeys:NewsKeys, keyworlds:keyworlds})
 })
+
 // ==============================routes=============================
 
 // ==============================send data===============================
@@ -408,7 +408,6 @@ app.post("/updater",async function(req,res){
         game.platforms = platforms
         data_games.push(game)
     }
-    console.log(data_games)
     res.send({status: 1, size:data_games.length})
  })
  app.post("/get_game",async function(req,res){
@@ -463,6 +462,61 @@ app.post("/updater",async function(req,res){
     let keywords = await KeyWorlds.findAll({attributes:["text"]})
     res.send({keywords: keywords})
  })
+ app.post('/news_search', async function(req, res){
+    let all_news = []
+    let news = await News.findAll({where:{title:{[Op.substring]:req.body.name}}})
+    if(isIterable(news)){
+        for(let i of news){
+            let news_key = await NewsKeyWorlds.findAll({where:{id_news:i.id}})
+            let keys = []
+            if(news_key != null){
+                for (let j of news_key){
+                    let key =  await KeyWorlds.findOne({where:{id:j.id_keyworld}})
+                    keys.push(key.text)
+                }
+            }
+            i.dataValues.keys = keys
+            all_news.push(i.dataValues)
+        }
+    }
+    let keys = await KeyWorlds.findAll({where:{text:{[Op.substring]:req.body.name}}})
+    if(isIterable(keys)){
+        let keys_id = []
+        for(let i of keys){
+            keys_id.push(i.id)
+        }
+        let news_keys = await NewsKeyWorlds.findAll({where:{id_keyworld:keys_id}})
+        let news_keys_id = []
+        for(let i of news_keys){
+            news_keys_id.push(i.id_news)
+        }
+        let newsKeys = await News.findAll({where:{id:news_keys_id}})
+        for(let i of newsKeys){
+            let news_key = await NewsKeyWorlds.findAll({where:{id_news:i.id}})
+            let keys = []
+            if(news_key != null){
+                for (let j of news_key){
+                    let key =  await KeyWorlds.findOne({where:{id:j.id_keyworld}})
+                    keys.push(key.text)
+                }
+            }
+            i.dataValues.keys = keys
+            all_news.push(i.dataValues)
+        }
+    }
+    const arrayUniqueByKey = [...new Map(all_news.map(item =>
+        [item.id, item])).values()];
+    res.render('pages/news_render',{NewsKeys:arrayUniqueByKey})
+})
+ app.post('/news_delete', async function(req, res){
+    let news = await News.findOne({where:{id:req.body.id}})
+    let news_keys = await NewsKeyWorlds.findAll({where:{id_news:news.id}})
+    for(let i of news_keys) {
+        i.destroy()
+    }
+    news.destroy()
+    res.send({status:1}) 
+})
 // ==============================send data===============================
 
 

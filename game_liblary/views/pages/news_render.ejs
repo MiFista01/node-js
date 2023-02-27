@@ -1,0 +1,14 @@
+<% NewsKeys.forEach(element => { %>
+    <div>
+       <img id="<%= element.id %>" src="imgs/delete.png" class="delete_news" alt="" >
+       <h3><%= element.title %></h3>
+       <p>Keyworlds:
+           <% element.keys.forEach(element2 => { %>
+               <%= element2 %>/
+           <% }) %>
+       </p>
+       <p><%= element.text.substring(0, 301)%>...</p>
+
+       <a href="<%= element.link %>" target="_blank">Link to original</a>
+    </div>
+   <% }) %>

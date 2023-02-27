@@ -210,7 +210,7 @@ main h1 {
     flex-wrap: wrap;
 }
 .page_news div{
-    width:20%;
+    width:30%;
     padding: 10px;
     box-sizing: border-box;
     display: flex;
@@ -219,6 +219,8 @@ main h1 {
 }
 .page_news div h3, .page_news div p, .page_news div a{
     width:100%;
+    margin: 0;
+    margin-bottom: 10px;
 }
 .page_news div h3{
     margin: 0;
