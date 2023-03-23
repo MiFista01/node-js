@@ -24,6 +24,9 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background:#261f38;
 }
+.button{
+    cursor: pointer;
+}
 header {
     width:100%;
     box-sizing:border-box;
@@ -192,6 +195,10 @@ main h1 {
     border-radius: 5px;
     font-size: 3vmin;
 }
+.search_news input::selection{
+    color: black;
+    background-color: white;
+}
 .search_news button{
     background: none;
     border-radius: 100%;
@@ -205,12 +212,13 @@ main h1 {
 .page_news{
     width:100%;
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
     position: relative;
     flex-wrap: wrap;
 }
 .page_news div{
-    width:30%;
+    width:80%;
     padding: 10px;
     box-sizing: border-box;
     display: flex;
@@ -234,12 +242,15 @@ main h1 {
 .page_news div:hover img{
     height:5vmin;
 }
+#block_games{
+    width: 80% !important;
+}
 .game {
     display:flex;
     flex-direction:column;
     justify-content:start;
     align-items:flex-start;
-    width:32%;
+    width:23%;
     border:2px solid #000;
     box-sizing:border-box;
     background-color:rgba(0,0,0,0.35);
@@ -253,13 +264,13 @@ main h1 {
 }
 .game .game_img {
     width:100%;
-    height:40vw;
+    height:25vw;
     background-size:cover;
     background-position:center;
     border-radius:20px;
 }
 .trashed .game_img{
-    height: 32vw;
+    height: 20vw;
 }
 .delete_block {
     display:flex;
@@ -505,12 +516,18 @@ input::selection,textarea::selection,input[type=date]::selection {
 .search {
     width:95%;
     flex-grow:1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .search h1 {
     width:100%;
     color:#FFF;
     text-align:center;
     font-size:40px;
+}
+.search .game_img{
+    height: 21vw;
 }
 .search_block {
     position:fixed;

@@ -11,7 +11,7 @@ exports.drop_gen_plat = async function(req,res){
         models.genre.destroy({where:{id:req.body.index}})
         res.send({status:1})
     }
-    if(req.body.obj == "platform"){
+    if(req.body.obj == "platform"){Func.isIterable
         models.platform.destroy({where:{id:req.body.index}})
         res.send({status:1})
     }
@@ -41,6 +41,7 @@ exports.updater = async function(req,res){
     }
     if(req.body.obj == "game"){
         try {
+            console.log("A")
             let game = await models.game.findOne({where:{id:req.body.id}})
             if(req.body.prime != undefined){
                 for(let i in req.body.prime){
@@ -62,7 +63,7 @@ exports.updater = async function(req,res){
                         if(game_genre == null){
                             models.gameGenre.create({id_game:req.body.id, id_genre:genre.id})
                         }else{
-                            old_genres = arrayRemove(old_genres,genre.id,"id_genre")
+                            old_genres = Func.arrayRemove(old_genres,genre.id,"id_genre")
                         }
                     }
                 }
@@ -82,7 +83,7 @@ exports.updater = async function(req,res){
                         if(game_platform == null){
                             models.gamePlatform.create({id_game:req.body.id, id_platform:platform.id})
                         }else{
-                            old_platforms = arrayRemove(old_platforms,platform.id,"id_platform")
+                            old_platforms = Func.arrayRemove(old_platforms,platform.id,"id_platform")
                         }
                     }
                 }
@@ -97,7 +98,7 @@ exports.updater = async function(req,res){
         
     }
  }
-var data_games = []
+ var data_games = []
 exports.search_game = async function(req,res){
     data_games = []
     let id_genres = []
@@ -115,17 +116,17 @@ exports.search_game = async function(req,res){
     let id_game_genre = []
     let id_game_platform = []
     let id_games = []
-    if(Func.Func.isIterable(genre)){
+    if(Func.isIterable(genre)){
         genres.forEach(element => {
             id_genres.push(element.id)
         });
     }
-    if(Func.Func.isIterable(platforms)){
+    if(Func.isIterable(platforms)){
         platforms.forEach(element => {
             id_platforms.push(element.id)
         });
     }
-    if(id_genres.length > 0 && Func.Func.isIterable(id_genres)){
+    if(id_genres.length > 0 && Func.isIterable(id_genres)){
         for(let i of id_genres){
             let game_genre = await models.gameGenre.findAll({attributes: ['id_game'],where:{id_genre:i}})
             for(let j of game_genre){
@@ -135,7 +136,7 @@ exports.search_game = async function(req,res){
             }
         }
     }
-    if(id_platforms.length > 0 && Func.Func.isIterable(id_platforms)){
+    if(id_platforms.length > 0 && Func.isIterable(id_platforms)){
         for(let i of id_platforms){
             let game_platform = await models.gamePlatform.findAll({attributes: ['id_game'],where:{id_platform:i}})
             for(let j of game_platform){
@@ -241,23 +242,23 @@ exports.restore = async function(req,res){
  }
 exports.full_delete = async function(req,res){
     if(req.body.obj == "game"){
-        models.game.destroy({where:{id:req.body.index},force:true})
-        models.gameGenre.destroy({where:{id_game:req.body.index}})
-        models.gamePlatform.destroy({where:{id_platform:req.body.index}})
+        await models.gameGenre.destroy({where:{id_game:req.body.index}}); 
+        await models.gamePlatform.destroy({where:{id_game:req.body.index}});
+        await models.game.destroy({where:{id:req.body.index},force:true});
         res.send({status:1})
     }
     if(req.body.obj == "genre"){
-        models.genre.destroy({where:{id:req.body.index},force:true})
+        await models.gameGenre.destroy({where:{id_genre:req.body.index}})
+        await models.genre.destroy({where:{id:req.body.index},force:true})
         res.send({status:1})
-        models.gameGenre.destroy({where:{id_genre:req.body.index}})
     }
     if(req.body.obj == "platform"){
-        models.platform.destroy({where:{id:req.body.index},force:true})
-        models.gamePlatform.destroy({where:{id_platform:req.body.index}})
+        await models.gamePlatform.destroy({where:{id_platform:req.body.index}})
+        await models.platform.destroy({where:{id:req.body.index},force:true})
         res.send({status:1})
     }
  }
-exports.news = async function(req,res){
+exports.news = async function(req,res){ 
     let keywords = await models.key_worlds.findAll({attributes:["text"]})
     res.send({keywords: keywords})
  }

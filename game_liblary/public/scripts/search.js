@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    
+    $(".buttons_block").slideUp(0);
     $("#form_search").submit(function (e) { 
         e.preventDefault();
         let send_data = {}
@@ -9,6 +9,7 @@ $(document).ready(function () {
                 send_data[i.name] = i.value
             }
         }
+        send_data.page = "search"
         send_data.asc_desc = form.asc_desc.value
         $("main").slideUp(200,function () {
             $("main").empty();
@@ -26,7 +27,7 @@ $(document).ready(function () {
                                 let game = await $.ajax({
                                 type: "post",
                                 url: "/get_game",
-                                data: {index:i, page:{search}},
+                                data: {index:i, page:"trash"},
                                 dataType: "html",
                                 success: async function (response) {
                                     $("main").append(response);
@@ -35,6 +36,8 @@ $(document).ready(function () {
                                 }
                             }); 
                         }
+                        
+                        $(".buttons_block").slideUp(0);
                     }
                 }
             });

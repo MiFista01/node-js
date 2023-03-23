@@ -39,7 +39,6 @@ $(document).ready(function () {
         $("input:checkbox[name=platform]:checked").each(function() {
             platforms.push($(this).val());
         });
-        console.log(genres)
         if(form.img.value!=""){
             $.ajax({
                 type: "POST",
@@ -80,7 +79,7 @@ $(document).ready(function () {
         }
         
     });
-    $("#add_worlds").click(function (e) { 
+    $("#add_genre").click(function (e) { 
         e.preventDefault();
         if ($("#genre").val() != "" && $("#genre").val() != null){
             let div = document.createElement("div")
