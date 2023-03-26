@@ -5,11 +5,15 @@ body {
     margin:0;
     padding:0;
 }
+/* p, a, h1, h2, h3, h4, h5{
+    margin: 0;
+    margin-bottom: 5px !important;
+} */
 .scroll_off{
     overflow: hidden;
 }
 ::selection {
-    color:#000;
+    color:#0e0152;
     background:#fff;
 }
 ::-webkit-scrollbar {
@@ -33,7 +37,7 @@ header {
     justify-content: space-between;
     align-items: center;
 }
-header .pages{
+header .page_fun{
     display:flex;
     flex-direction:row;
     align-items:center;
@@ -60,15 +64,11 @@ header h1 {
     writing-mode:vertical-rl;
     text-orientation:upright;
 }
-#home p {
-    font-size:20px;
-    margin:0;
-}
 #icon {
     width:7vw;
 }
 header h2 {
-    font-size:25px;
+    font-size:4vmin;
     margin:0;
 }
 header a {
@@ -109,6 +109,14 @@ header ul li {
     cursor:auto;
     margin:0 40px 0 0;
 }
+header .user_fun{
+    display: flex;
+    margin-right: 20px;
+}
+header p{
+    cursor: pointer;
+    margin: 0px 10px;
+}
 .wrapper {
     width:100%;
     min-height: 100vh;
@@ -123,7 +131,9 @@ header ul li {
     display: flex;
     justify-content:space-between;
     flex-grow: 1;
+    align-items: start;
 }
+
 .news {
     width:14%;
     position:sticky;
@@ -134,12 +144,18 @@ header ul li {
 .news h2 {
     width:100%;
     text-align:center;
+    font-size: 3vmin;
+}
+.news h4{
+    font-size: 2.5vmin;
 }
 .news p {
     margin:0;
+    font-size: 2vmin;
 }
 .news a {
     text-decoration:none;
+    font-size: 2vmin;
 }
 .news_block {
     margin-bottom:30px;
@@ -160,18 +176,19 @@ header ul li {
     flex-grow: 1;
 }
 main {
-    min-width: 85%;
+    width: 70%;
+    height: max-content;
     display:flex;
     justify-content:space-around;
+    align-items: stretch;
     flex-wrap:wrap;
     color:#FFF;
     flex-grow: 1;
-    align-items: baseline;
+    margin: 0px auto;
 }
 main h1 {
-    width:100%;
-    text-align:center;
-    font-size:40px;
+    width:95%;
+    font-size: 6vmin;
     margin: 0;
     padding:0;
 }
@@ -181,6 +198,10 @@ main h1 {
     justify-content: center;
     align-items: center;
     position: relative;
+}
+.search_news input::selection{
+    color: black;
+    background-color: white;
 }
 .search_news input{
     width:80%;
@@ -204,26 +225,35 @@ main h1 {
 }
 .page_news{
     width:100%;
-    display: flex;
-    justify-content: space-around;
     position: relative;
-    flex-wrap: wrap;
+}
+.page_news::selection{
+    color: black !important;
+    background-color: white !important;
 }
 .page_news div{
-    width:30%;
+    width:100%;
     padding: 10px;
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
     flex-direction:row-reverse;
 }
-.page_news div h3, .page_news div p, .page_news div a{
+.page_news div h3, .page_news div p{
     width:100%;
     margin: 0;
     margin-bottom: 10px;
 }
 .page_news div h3{
     margin: 0;
+    font-size: 4vmin;
+}
+.page_news div p, .page_news div a{
+    margin: 0;
+    font-size: 3vmin;
+}
+.page_news p:nth-child(3){
+    margin-bottom: 20px !important;
 }
 .page_news div img{
     height:0px;
@@ -239,7 +269,7 @@ main h1 {
     flex-direction:column;
     justify-content:start;
     align-items:flex-start;
-    width:32%;
+    width:23%;
     border:2px solid #000;
     box-sizing:border-box;
     background-color:rgba(0,0,0,0.35);
@@ -247,19 +277,33 @@ main h1 {
     margin-bottom:20px;
     position:relative;
     padding:20px;
+    margin-top: 10px;
+}
+.game::-webkit-scrollbar{
+    display: none;
+}
+.game h2{
+    font-size: 4vmin;
+    margin: 0;
+    margin-top: 10px;
 }
 .game p {
-    margin-bottom:0;
+    margin:0;
+    font-size: 2.2vmin;
+    margin-bottom: 5px;
 }
 .game .game_img {
     width:100%;
-    height:40vw;
+    height:26vw;
     background-size:cover;
     background-position:center;
     border-radius:20px;
 }
+.trashed{
+    width: 25%;
+}
 .trashed .game_img{
-    height: 32vw;
+    height: 24.5vw;
 }
 .delete_block {
     display:flex;
@@ -286,7 +330,7 @@ main h1 {
     box-shadow:0 0 5px 5px #000;
 }
 #form {
-    width:80%;
+    width:90%;
     display:flex;
     flex-direction:row;
     background-color:#f6f6f6;
@@ -343,7 +387,7 @@ main h1 {
 }
 input::selection,textarea::selection,input[type=date]::selection {
     color:#fff;
-    background:#000;
+    background:#000000;
 }
 #form textarea {
     resize:none;
@@ -400,6 +444,15 @@ input::selection,textarea::selection,input[type=date]::selection {
     font-weight:900;
     cursor:pointer;
     padding:10px 40px;
+}
+.result{
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    margin-top: 10px;
+}
+.result p{
+    margin: 0;
 }
 .manager {
     width:45%;
@@ -505,12 +558,19 @@ input::selection,textarea::selection,input[type=date]::selection {
 .search {
     width:95%;
     flex-grow:1;
+    display: flex;
+    justify-content: space-around;
+    margin: auto;
+    flex-wrap: wrap;
 }
 .search h1 {
     width:100%;
     color:#FFF;
     text-align:center;
     font-size:40px;
+}
+.search .game .game_img{
+    height: 60vh;
 }
 .search_block {
     position:fixed;
@@ -650,7 +710,6 @@ input::selection,textarea::selection,input[type=date]::selection {
     flex-wrap:wrap;
 }
 .trash_objs p {
-    margin-left:10px;
     flex-grow:1;
 }
 .trash_row .buttons_block img {

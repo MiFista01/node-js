@@ -8,6 +8,10 @@ models.key_worlds = require("./key_worlds");
 models.news = require("./news")
 models.news_keyworld = require("./news_keyworld");
 models.platform = require("./platform")
+models.comments = require("./comments");
+models.favourites = require("./favourites")
+models.raitings = require("./raitings");
+models.user = require("./user")
 models.Op = sequelize.Op
 
 module.exports = models;

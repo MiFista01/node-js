@@ -43,6 +43,7 @@ $(document).ready(function () {
             });
         });
     });
+    showButton(".trash_row")
     showButton(".game")
     restore(".restore")
     fullDelete(".full_delete")

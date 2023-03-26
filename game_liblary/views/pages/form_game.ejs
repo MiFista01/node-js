@@ -4,8 +4,8 @@
         <%- include('../partials/head'); %>
         <script src="scripts/form_game.js"></script>
     </head>
-    <body class="">
-        <div class="main">
+    <body>
+        <div class="wrapper">
             <header>
                 <%- include('../partials/header'); %>
             </header>
@@ -55,7 +55,10 @@
                                 </div>
                             </div>
                         </div>
-                        <button>create</button>
+                        <div class="result">
+                            <button>create</button>
+                            <p id="message"></p>
+                        </div>
                     </div>                
                 </form>
             </main>

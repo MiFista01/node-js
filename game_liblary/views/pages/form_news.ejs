@@ -13,7 +13,7 @@
                 <h1>Form for news</h1>
                 <form id="form" method="POST" style="width: 50%;">
                     <input type="text" name="title" placeholder="News Title">
-                    <input type="text" name="link" placeholder="News link">
+                    <input type="text" name="link" placeholder="News link" autocomplete="off">
                     <div class="key_worlds">
                         <div>
                             <input type="text" list="key_worlds" id="key_world" placeholder="Add keywrorlds" autocomplete="off">
@@ -22,7 +22,7 @@
                                     <option value="<%=element.text%>"></option>
                                 <% }) %>
                             </datalist>
-                            <p id="add_worlds" class="button">Add genre</p>
+                            <p id="add_worlds" class="button">Add key</p>
                         </div>
                         
                         <div class="checkboxes" id="news_worlds">

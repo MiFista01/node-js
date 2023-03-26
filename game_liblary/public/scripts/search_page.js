@@ -10,8 +10,6 @@ $(document).ready(function () {
             }
         }
         send_data.asc_desc = form.asc_desc.value
-        $("main").slideUp(200,function () {
-            $("main").empty();
             $.ajax({
                 type: "post",
                 url: "/search_game",
@@ -19,26 +17,29 @@ $(document).ready(function () {
                 dataType: "json",
                 success: async function (response) {
                     if(response.status == 1){
-                        $("main").slideDown(200)
-                        const size = response.size
-                        $("#result").text("Result: "+size);
-                        for(let i = 0; i< size;i++){
-                                let game = await $.ajax({
-                                type: "post",
-                                url: "/get_game",
-                                data: {index:i, page:{search}},
-                                dataType: "html",
-                                success: async function (response) {
-                                    $("main").append(response);
-                                    showButton(".game")
-                                    deletePost(".button_delete")
-                                }
-                            }); 
-                        }
+                        $("main").slideUp(200, async ()=>{
+                            $("main").empty();
+                            const size = response.size
+                            $("#result").text("Result: "+size);
+                            for(let i = 0; i < size; i++){
+                                await $.ajax({
+                                    type: "post",
+                                    url: "/get_game",
+                                    data: {index:i, page:"search"},
+                                    dataType: "html",
+                                    success: async function (response) {
+                                        $("main").append(response);
+                                        showButton(".game")
+                                        deletePost(".button_delete")
+                                    }
+                                }); 
+                            }
+                            $("main").slideDown(200)
+                        });
+                        
                     }
                 }
             });
-        });
     });
     showButton(".game")
     deletePost(".button_delete")
