@@ -6,11 +6,13 @@ const Platform = require("./models/platform")
 const GameGenre = require("./models/gameGenre")
 const GamePlatform = require("./models/gamePlatform")
 const News = require("./models/news")
+const KeyWorlds = require("./models/key_worlds")
+const NewsKeyWorlds = require("./models/news_keyworld")
 const Comments = require("./models/comments")
 const Favourites = require("./models/favourites")
 const Raiting = require("./models/raitings")
 const User = require("./models/user")
-db.sync({allow:true})
+// db.sync({allow:true})
 const cors = require("cors");
 var express = require("express")
 var app = express()
@@ -84,7 +86,6 @@ app.get('/', async function(req, res){
 require("./routes/form_page.routes")(app)
 require("./routes/user_page.routes")(app)
 require("./routes/data.routes")(app)
-require("./routes/create_objects.routes")(app)
+require("./routes/objects.routes")(app) 
 // ==============================routes=============================
-
 app.listen(3000);

@@ -54,15 +54,15 @@ exports.search_page = async function(req, res){
     }
     let titles = await models.game.findAll({
         attributes: ['title'],
-        distinct: true
+        group: ['title']
     })
     let issuers = await models.game.findAll({
         attributes: ['issuer'],
-        distinct: true
+        group: ['issuer']
     })
     let developers = await models.game.findAll({
         attributes: ['developer'],
-        distinct: true
+        group: ['developer']
     })
     let genres = await models.genre.findAll({attributes: ['name']})
     let platforms = await models.platform.findAll({attributes: ['name']})

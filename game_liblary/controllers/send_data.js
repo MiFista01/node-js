@@ -11,7 +11,7 @@ exports.drop_gen_plat = async function(req,res){
         models.genre.destroy({where:{id:req.body.index}})
         res.send({status:1})
     }
-    if(req.body.obj == "platform"){
+    if(req.body.obj == "platform"){Func.isIterable
         models.platform.destroy({where:{id:req.body.index}})
         res.send({status:1})
     }
@@ -41,6 +41,7 @@ exports.updater = async function(req,res){
     }
     if(req.body.obj == "game"){
         try {
+            console.log("A")
             let game = await models.game.findOne({where:{id:req.body.id}})
             if(req.body.prime != undefined){
                 for(let i in req.body.prime){
@@ -97,7 +98,7 @@ exports.updater = async function(req,res){
         
     }
  }
-var data_games = []
+ var data_games = []
 exports.search_game = async function(req,res){
     data_games = []
     let id_genres = []
@@ -256,7 +257,7 @@ exports.full_delete = async function(req,res){
         res.send({status:1})
     }
  }
-exports.news = async function(req,res){
+exports.news = async function(req,res){ 
     let keywords = await models.key_worlds.findAll({attributes:["text"]})
     res.send({keywords: keywords})
  }
