@@ -1,13 +1,13 @@
 $(document).ready(function () {
-    $("#auth").slideUp(0);
-    $("#login").click(function (e) { 
+    $(".window").slideUp(0);
+    $("#btn_login").click(function (e) { 
         e.preventDefault();
-        $("#auth").show(200);
+        $("#window_log").show(0);
         $("body").toggleClass("scroll_off");
     });
     $(".back").click(function (e) { 
         e.preventDefault();
-        $("#auth").hide(200);
+        $("#window_log").hide(0);
         $("body").toggleClass("scroll_off");
     });
     $("#log").submit(function (e) { 
@@ -17,7 +17,7 @@ $(document).ready(function () {
         $.ajax({
             type: "post",
             url: "/login",
-            data: {name:form.user.value, password:form.password.value},
+            data: {user:form.user.value, password:form.password.value},
             dataType: "json",
             success: function (response) {
                 if(response.status == 1){

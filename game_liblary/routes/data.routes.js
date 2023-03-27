@@ -1,5 +1,12 @@
 const send_data = require("../controllers/send_data");
 module.exports = function(app){
+    app.use(function(req, res, next) {
+        res.header(
+          "Access-Control-Allow-Headers",
+          "x-access-token, Origin, Content-Type, Accept"
+        );
+        next();
+    });
     app.post('/datalists', send_data.datalists )
     app.post('/drop_game', send_data.drop_game )
     app.post('/drop_gen_plat', send_data.drop_gen_plat )
