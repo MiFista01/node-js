@@ -6,6 +6,12 @@
 <link rel='stylesheet' type='text/css' media='screen' href='../css/style.css'>
 <link rel='stylesheet' type='text/css' media='screen' href='../css/window.css'>
 <script src="../scripts/jquery-3.6.1.min.js"></script>
-<script src="../scripts/header.js"></script>
-<script src="../scripts/registration.js"></script>
-<script src="../scripts/login.js"></script>
+<script src="../scripts/rating.js"></script>
+<% if (!user) { %>
+    <script src="../scripts/header.js"></script>
+    <script src="../scripts/guest_fun.js"></script>
+<% }else{ %>
+    <link rel='stylesheet' type='text/css' media='screen' href='../css/user.css'>
+    <script src="../scripts/user_fun.js"></script>
+    <script src="../scripts/header.js"></script>
+<%}%>

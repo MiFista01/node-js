@@ -21,7 +21,9 @@
                 <div class="page_news">
                     <% NewsKeys.forEach(element => { %>
                      <div>
-                        <img id="<%= element.news.id %>" src="imgs/delete.png" class="delete_news" alt="" >
+                        <% if (user && (user.role == 2 || user.role == 3)) { %>
+                            <img id="<%= element.id %>" src="imgs/delete.png" class="delete_news" alt="" >
+                        <% } %>
                         <h3><%= element.news.title %></h3>
                         <p>Keyworlds:
                             <% element.keyworlds.forEach(element2 => { %>

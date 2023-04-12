@@ -9,8 +9,8 @@
     width: 100%;
     height: 100vh;
     z-index: 10;
-    /* visibility: hidden; */
     transition-duration: 0.2s;
+    color: black !important;;
 }
 .window .back{
     width: 100%;
@@ -36,8 +36,12 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    
+    align-items: center;   
+}
+.window form > div{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 .window form input{
     width: 100%;

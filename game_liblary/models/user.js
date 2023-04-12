@@ -21,7 +21,8 @@ User.init({
         type: DataTypes.STRING
     },
     role:{
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        defaultValue: 1
     },
     img:{
         type: DataTypes.TEXT

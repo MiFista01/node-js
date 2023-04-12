@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $(".buttons_block").slideUp(0);
+    $(".user_btns").hide(0);
     $("#form_search").submit(function (e) { 
         e.preventDefault();
         let send_data = {}
@@ -9,10 +9,8 @@ $(document).ready(function () {
                 send_data[i.name] = i.value
             }
         }
-        send_data.page = "trash"
+        send_data.page = "search"
         send_data.asc_desc = form.asc_desc.value
-        $("main").slideUp(200,function () {
-            $("main").empty();
             $.ajax({
                 type: "post",
                 url: "/search_game",
@@ -20,11 +18,11 @@ $(document).ready(function () {
                 dataType: "json",
                 success: async function (response) {
                     if(response.status == 1){
-                        $("main").slideDown(200)
+                        $("main").empty();
                         const size = response.size
                         $("#result").text("Result: "+size);
-                        for(let i = 0; i< size;i++){
-                                let game = await $.ajax({
+                        for(let i = 0; i < size; i++){
+                            await $.ajax({
                                 type: "post",
                                 url: "/get_game",
                                 data: {index:i, page:"trash"},
@@ -37,24 +35,19 @@ $(document).ready(function () {
                                 }
                             }); 
                         }
-                        $(".buttons_block").slideUp(0);
                     }
                 }
             });
-        });
     });
-    showButton(".trash_row")
-    showButton(".game")
     restore(".restore")
     fullDelete(".full_delete")
 });
 function showButton(obj) {
     $(obj).hover(function () {
-        $($(this).children()[0]).slideDown(200);
+        $($(this).find(".user_btns")).show(200);
     }, function () {
-        $($(this).children()[0]).slideUp(200);
-    }
-);
+        $($(this).find(".user_btns")).hide(200);
+    });
 }
 function restore(obj){
     $(obj).click(function (e) { 

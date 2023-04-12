@@ -1,29 +1,49 @@
 <div class="page_fun">
   <h1 id="home"><a href="/"><img src="../imgs/icon.png" alt="" id="icon"></a></h1>
   <ul>
-    <li>
-      <h2 id="btn_creaters">MANAGERS</h2>
-      <ul class="managers">
-        <li><h3><a href="/form_game">MANAGER GAME</a></h3></li>
-        <li><h3><a href="/form_news">MANAGER NEWS</a></h3></li>
-        <li><h3><a href="/genre_platform">MANAGER <br> GENRE/PLATFORM</a></h3></li>
-      </ul>
-    </li>
+    <% if (user != false && (user.role == 2|| user.role == 3)) { %>
+      <li>
+        <h2 id="btn_creaters">MANAGERS</h2>
+        <ul class="managers">
+          <li><h3><a href="/form_game">MANAGER GAME</a></h3></li>
+          <li><h3><a href="/form_news">MANAGER NEWS</a></h3></li>
+          <li><h3><a href="/genre_platform">MANAGER <br> GENRE/PLATFORM</a></h3></li>
+        </ul>
+      </li>
+    <% } %>
     <li>
       <h2><a href="/news_pages">NEWS</a></h2>
     </li>
     <li>
       <h2><a href="/search_page">SEARCH</a></h2>
     </li>
-    <li class="">
-      <h2><a href="/trash_page">RESTORE</a></h2>
-    </li>
+    <% if (user != false && user.role == 3) { %>
+      <li class="">
+        <h2><a href="/trash_page">RESTORE</a></h2>
+      </li>
+    <% } %>
   </ul>
 </div>
 <div class="user_fun">
-  <p id="btn_login">Log in</p>
-  <%- include("../fragments/login_form.ejs") %>
-  <span>/</span>
-  <p id="btn_reg">Registration</p>
-  <%- include("../fragments/registration_form.ejs") %>
+  <% if (!user) { %>
+      <p id="btn_login">Log in</p>
+      <%- include("../fragments/login_form.ejs") %>
+      <span>/</span>
+      <p id="btn_reg">Registration</p>
+      <%- include("../fragments/registration_form.ejs") %>
+  <% }else{ %>
+    <div class="profile">
+      <% if (user.img == null) { %>
+        <div class="avatar" style="background-image: url(../imgs/default_avatar.png);" id="avatar"></div>
+      <% }else{%>
+        <div class="avatar" style="background-image: url(../uploads/user<%= user.id %>/<%= user.img %>)" id="avatar"></div>
+      <%}%>
+       <p class="username"><%= user.username %></p>
+       <div class="btns">
+        <a href="/profile">Profile</a>
+        <a href="/favourites">Favourites</a>
+        <a href="/logout">Log out</a>
+      </div>
+    </div>
+  <%}%>
 </div>

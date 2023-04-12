@@ -10,7 +10,7 @@
                 <%- include('../partials/header'); %>
             </header>
             <main>
-                <% if (read == false) { %>
+                <% if (user && (user.role == 2 || user.role == 3)) { %>
                     <form id="form" method="POST">
                         <div class="image_input">
                             <div class="image post" id="add_image" style="background-image: url(<%=prime.img%>); background-size: cover; border: none;cursor: auto;"></div>
@@ -71,7 +71,34 @@
                             <p id="callback"></p>
                         </div>
                     </form>
-                <% } %>
+                <% }else{ %>
+                    <div class="show">
+                        <div class="image_input">
+                            <div class="image post" id="add_image" style="background-image: url(<%=prime.img%>); background-size: cover; border: none;cursor: auto;"></div>
+                        </div>
+                        <div class="dates">
+                            <p><%=prime.title%></p>
+                            <p><%=prime.published_date%></p>
+                            <p><%=prime.issuer%></p>
+                            <p><%=prime.developer%></p>
+                            <div class="other">
+                                <div class="genres">
+                                    <% genres.forEach(element => { %>
+                                        <p><%=element.name%></p>
+                                    <% }) %>
+                                </div>
+                                <div class="platforms">
+                                    <div class="platforms">
+                                        <% platforms.forEach(element => { %>
+                                            <p><%=element.name%></p>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                            </div>
+                            <p><%=prime.description%></p>
+                        </div>
+                    </div>
+                <%}%>
                 
             </main>
             <footer>

@@ -10,7 +10,7 @@ models.news_keyworld = require("./news_keyworld");
 models.platform = require("./platform")
 models.comments = require("./comments");
 models.favourites = require("./favourites")
-models.raitings = require("./raitings");
+models.ratings = require("./raitings");
 models.user = require("./user")
 models.Op = sequelize.Op
 

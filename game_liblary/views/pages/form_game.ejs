@@ -9,59 +9,61 @@
             <header>
                 <%- include('../partials/header'); %>
             </header>
-            <main>
-                <form id="form" method="POST">
-                    <div class="image_input">
-                        <input type="file" name="img" id="img" accept="image/png, image/jpeg">
-                        <div class="image" id="add_image">
-    
-                        </div>
-                    </div>
-                    <div class="dates">
-                        <input type="text" name="title" placeholder="Name">
-                        <input type="date" name="date">
-                        <input type="text" name="issuer" placeholder="Issure"  autocomplete="off" list="issuers">
-                        <datalist id="issuers">
-                            <% all_issuers.forEach(element => { %>
-                             <option value="<%=element.issuer%>"></option>
-                            <% }) %>
-                        </datalist>
-                        <input type="text" name="developer" placeholder="Developer" autocomplete="off" list="developers">
-                        <datalist id="developers">
-                            <% all_developers.forEach(element => { %>
-                             <option value="<%=element.developer%>"></option>
-                            <% }) %>
-                        </datalist>
-                        <textarea name="description" id="" cols="30" rows="10" placeholder="Description" ></textarea>
-                        <div class="other">
-                            <div class="genres">
-                                <input type="text" list="genres" id="genre" placeholder="Add genre" autocomplete="off">
-                                <datalist id="genres">
-    
-                                </datalist>
-                                <p id="add_genre" class="button">Add genre</p>
-                                <div class="checkboxes" id="game_genres">
-            
-                                </div>
-                            </div>
-                            <div class="platforms">
-                                <input type="text" list="platforms" id="platform" placeholder="Add platform" autocomplete="off">
-                                <datalist id="platforms">
-    
-                                </datalist>
-                                <p id="add_platform" class="button">Add Platform</p>
-                                <div class="checkboxes" id="game_platforms">
-                                    
-                                </div>
+            <% if (user && user.role == 3) { %>
+                <main>
+                    <form id="form" method="POST">
+                        <div class="image_input">
+                            <input type="file" name="img" id="img" accept="image/png, image/jpeg">
+                            <div class="image" id="add_image">
+        
                             </div>
                         </div>
-                        <div class="result">
-                            <button>create</button>
-                            <p id="message"></p>
-                        </div>
-                    </div>                
-                </form>
-            </main>
+                        <div class="dates">
+                            <input type="text" name="title" placeholder="Name">
+                            <input type="date" name="date">
+                            <input type="text" name="issuer" placeholder="Issure"  autocomplete="off" list="issuers">
+                            <datalist id="issuers">
+                                <% all_issuers.forEach(element => { %>
+                                 <option value="<%=element.issuer%>"></option>
+                                <% }) %>
+                            </datalist>
+                            <input type="text" name="developer" placeholder="Developer" autocomplete="off" list="developers">
+                            <datalist id="developers">
+                                <% all_developers.forEach(element => { %>
+                                 <option value="<%=element.developer%>"></option>
+                                <% }) %>
+                            </datalist>
+                            <textarea name="description" id="" cols="30" rows="10" placeholder="Description" ></textarea>
+                            <div class="other">
+                                <div class="genres">
+                                    <input type="text" list="genres" id="genre" placeholder="Add genre" autocomplete="off">
+                                    <datalist id="genres">
+        
+                                    </datalist>
+                                    <p id="add_genre" class="button">Add genre</p>
+                                    <div class="checkboxes" id="game_genres">
+                
+                                    </div>
+                                </div>
+                                <div class="platforms">
+                                    <input type="text" list="platforms" id="platform" placeholder="Add platform" autocomplete="off">
+                                    <datalist id="platforms">
+        
+                                    </datalist>
+                                    <p id="add_platform" class="button">Add Platform</p>
+                                    <div class="checkboxes" id="game_platforms">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="result">
+                                <button>create</button>
+                                <p id="message"></p>
+                            </div>
+                        </div>                
+                    </form>
+                </main>
+            <% } %>
     
             <footer>
                 <%- include('../partials/footer'); %>

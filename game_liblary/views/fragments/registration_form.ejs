@@ -1,11 +1,15 @@
 <div class="window" id="window_reg">
     <div class="back"></div>
     <div class="body">
-        <form method="post" id="reg">
-            <input type="text" name="user" placeholder="User">
+        <form id="reg" action="/reg" method="post">
+            <input type="text" name="username" placeholder="User">
+            <input type="email" name="email" placeholder="Email">
             <input type="password" name="password" placeholder="Password">
-            <input type="file" name="avatar">
-            <button>Registration</button>
+            <!-- <input type="file" name="avatar" id="avatar" accept="image/png, image/jpeg, image/jpg"> -->
+            <div>
+                <p class="callback">&#8205;</p>
+                <button>Registration</button>
+            </div>
         </form>
     </div>
 </div>

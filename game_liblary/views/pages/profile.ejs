@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../partials/head'); %>
+        <script src="../scripts/game.js"></script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <header>
+                <%- include('../partials/header'); %>
+            </header>
+            <main>
+                <form id="avatar" method="post">
+                    <div class="avatar_img" <% if (user.img != null && user.img != "") { %>
+                      style="background-image: url(../uploads/user<%= user.id %>/<%= user.img %>);"
+                    <% } %>>
+                        <img src="../imgs/plus.png" alt="">
+                    </div>
+                    <input type="file" name="avatar" id="avatar_img">
+                    <button>Update avatar</button>
+                    <p id="avatar_callback">&#32;</p>
+                </form>
+                <form method="post" id="profile_data">
+                    <% if (user.role != 3) { %>
+                        <input type="text" value="<%= user.username %>" placeholder="Username" name="username">
+                    <% } %>
+                    <input type="email" value="<%= user.email %>" placeholder="Email" name="email">
+                    <input type="text" placeholder="Password" name="password">
+                    <button>Update data</button>
+                    <p id="callback">&#32;</p>
+                </form>
+            </main>
+            <footer>
+                <%- include('../partials/footer'); %>
+            </footer>
+        </div>
+    </body>
+</html>

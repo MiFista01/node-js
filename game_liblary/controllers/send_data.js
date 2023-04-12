@@ -1,5 +1,6 @@
 const models = require('../models')
-const Func = require('../Fun')
+const Funs = require('../Fun')
+const key = require("../config/key");
 
 exports.datalists = async function(req,res){
     let genres = await models.genre.findAll()
@@ -7,100 +8,108 @@ exports.datalists = async function(req,res){
     res.send({genres:genres, platforms:platforms})
 }
 exports.drop_gen_plat = async function(req,res){
-    if(req.body.obj == "genre"){
-        models.genre.destroy({where:{id:req.body.index}})
-        res.send({status:1})
-    }
-    if(req.body.obj == "platform"){Func.isIterable
-        models.platform.destroy({where:{id:req.body.index}})
-        res.send({status:1})
+    let user = await Funs.checkUser(req.cookies.token);
+    if(user && (user.role == 2 || user.role == 3)){
+        if(req.body.obj == "genre"){
+            models.genre.destroy({where:{id:req.body.index}})
+            res.send({status:1})
+        }
+        if(req.body.obj == "platform"){Funs.isIterable
+            models.platform.destroy({where:{id:req.body.index}})
+            res.send({status:1})
+        }
+    }else{
+        res.send({status:0})
     }
 }
 exports.drop_game = async function(req,res){
-    models.game.destroy({where:req.body})
-    res.send({status:1})
+    let user = await Funs.checkUser(req.cookies.token);
+    if(user && (user.role == 2 || user.role == 3)){
+        models.game.destroy({where:req.body})
+        res.send({status:1})
+    }else{
+        res.send({status:0})
+    }
  }
 exports.updater = async function(req,res){
-    if(req.body.obj == "genre"){
-        try {
-            models.genre.update({name:req.body.value},{where:{id:req.body.id}})
-            res.send({status:1})
-        } catch (error) {
-            res.send({status:0})
-        }
-        
-    }
-    if(req.body.obj == "platform"){
-        try {
-            models.platform.update({name:req.body.value},{where:{id:req.body.id}})
-            res.send({status:1})
-        } catch (error) {
-            res.send({status:0})
-        }
-        
-    }
-    if(req.body.obj == "game"){
-        try {
-            console.log("A")
-            let game = await models.game.findOne({where:{id:req.body.id}})
-            if(req.body.prime != undefined){
-                for(let i in req.body.prime){
-                    if(game[i] != req.body.prime[i]){
-                        game[i] = req.body.prime[i]
-                    }
-                }
-                game.save()
+    let user = await Funs.checkUser(req.cookies.token);
+    if(user && (user.role == 2 || user.role == 3)){
+        if(req.body.obj == "genre"){
+            try {
+                models.genre.update({name:req.body.value},{where:{id:req.body.id}})
+                res.send({status:1})
+            } catch (error) {
+                res.send({status:0})
             }
-            let old_genres = await models.gameGenre.findAll({where:{id_game:req.body.id}})
-            if(Func.isIterable(req.body.genres)){
-                for(let i of req.body.genres){
-                    let genre = await models.genre.findOne({where:{name:i}})
-                    if (genre == null){
-                        let new_genre = await models.genre.create({name:i})
-                        let new_game_genre = await models.gameGenre.create({id_game:req.body.id, id_genre:new_genre.id})
-                    }else{
-                        let game_genre = await models.gameGenre.findOne({where:{id_game:req.body.id, id_genre:genre.id}})
-                        if(game_genre == null){
-                            models.gameGenre.create({id_game:req.body.id, id_genre:genre.id})
+            
+        }
+        if(req.body.obj == "platform"){
+            try {
+                models.platform.update({name:req.body.value},{where:{id:req.body.id}})
+                res.send({status:1})
+            } catch (error) {
+                res.send({status:0})
+            }
+            
+        }
+        if(req.body.obj == "game"){
+            try {
+                let game = await models.game.findOne({where:{id:req.body.id}})
+                game.update(req.body.prime)
+                let old_genres = await models.gameGenre.findAll({where:{id_game:req.body.id}})
+                if(Funs.isIterable(req.body.genres)){
+                    for(let i of req.body.genres){
+                        let genre = await models.genre.findOne({where:{name:i}})
+                        if (genre == null){
+                            let new_genre = await models.genre.create({name:i})
+                            let new_game_genre = await models.gameGenre.create({id_game:req.body.id, id_genre:new_genre.id})
                         }else{
-                            old_genres = Func.arrayRemove(old_genres,genre.id,"id_genre")
+                            let game_genre = await models.gameGenre.findOne({where:{id_game:req.body.id, id_genre:genre.id}})
+                            if(game_genre == null){
+                                models.gameGenre.create({id_game:req.body.id, id_genre:genre.id})
+                            }else{
+                                old_genres = Funs.arrayRemove(old_genres,genre.id,"id_genre")
+                            }
                         }
                     }
                 }
-            }
-            for(let i of old_genres){
-                models.gameGenre.destroy({where:{id_genre:i.id_genre}})
-            }
-            let old_platforms = await models.gamePlatform.findAll({where:{id_game:req.body.id}})
-            if(Func.isIterable(req.body.platforms)){
-                for(let i of req.body.platforms){
-                    let platform = await models.platform.findOne({where:{name:i}})
-                    if (platform == null){
-                        let new_platform = await models.platform.create({name:i})
-                        let new_game_platform = await models.gamePlatform.create({id_game:req.body.id, id_platform:new_platform.id})
-                    }else{
-                        let game_platform = await models.gamePlatform.findOne({where:{id_game:req.body.id, id_platform:platform.id}})
-                        if(game_platform == null){
-                            models.gamePlatform.create({id_game:req.body.id, id_platform:platform.id})
+                for(let i of old_genres){
+                    models.gameGenre.destroy({where:{id_genre:i.id_genre}})
+                }
+                let old_platforms = await models.gamePlatform.findAll({where:{id_game:req.body.id}})
+                if(Funs.isIterable(req.body.platforms)){
+                    for(let i of req.body.platforms){
+                        let platform = await models.platform.findOne({where:{name:i}})
+                        if (platform == null){
+                            let new_platform = await models.platform.create({name:i})
+                            let new_game_platform = await models.gamePlatform.create({id_game:req.body.id, id_platform:new_platform.id})
                         }else{
-                            old_platforms = Func.arrayRemove(old_platforms,platform.id,"id_platform")
+                            let game_platform = await models.gamePlatform.findOne({where:{id_game:req.body.id, id_platform:platform.id}})
+                            if(game_platform == null){
+                                models.gamePlatform.create({id_game:req.body.id, id_platform:platform.id})
+                            }else{
+                                old_platforms = Funs.arrayRemove(old_platforms,platform.id,"id_platform")
+                            }
                         }
                     }
                 }
+                for(let i of old_platforms){
+                    models.gamePlatform.destroy({where:{id_platform:i.id_platform}})
+                }
+    
+                res.send({status:1})
+            } catch (error) {
+                res.send({status:0})
             }
-            for(let i of old_platforms){
-                models.gamePlatform.destroy({where:{id_platform:i.id_platform}})
-            }
-            res.send({status:1})
-        } catch (error) {
-            res.send({status:0})
+            
         }
-        
+    }else{
+        res.send({status:0});
     }
  }
- var data_games = []
 exports.search_game = async function(req,res){
-    data_games = []
+    let user = await Funs.checkUser(req.cookies.token);
+    let games_id = []
     let id_genres = []
     let id_platforms = []
     let genre = req.body.genre
@@ -116,17 +125,17 @@ exports.search_game = async function(req,res){
     let id_game_genre = []
     let id_game_platform = []
     let id_games = []
-    if(Func.isIterable(genre)){
+    if(Funs.isIterable(genre)){
         genres.forEach(element => {
             id_genres.push(element.id)
         });
     }
-    if(Func.isIterable(platforms)){
+    if(Funs.isIterable(platforms)){
         platforms.forEach(element => {
             id_platforms.push(element.id)
         });
     }
-    if(id_genres.length > 0 && Func.isIterable(id_genres)){
+    if(id_genres.length > 0 && Funs.isIterable(id_genres)){
         for(let i of id_genres){
             let game_genre = await models.gameGenre.findAll({attributes: ['id_game'],where:{id_genre:i}})
             for(let j of game_genre){
@@ -136,7 +145,7 @@ exports.search_game = async function(req,res){
             }
         }
     }
-    if(id_platforms.length > 0 && Func.isIterable(id_platforms)){
+    if(id_platforms.length > 0 && Funs.isIterable(id_platforms)){
         for(let i of id_platforms){
             let game_platform = await models.gamePlatform.findAll({attributes: ['id_game'],where:{id_platform:i}})
             for(let j of game_platform){
@@ -146,7 +155,7 @@ exports.search_game = async function(req,res){
             }
         }
     }
-    if((Func.isIterable(id_game_genre) && id_game_genre.length>0) && (Func.isIterable(id_game_platform) && id_game_platform.length>0)){
+    if((Funs.isIterable(id_game_genre) && id_game_genre.length>0) && (Funs.isIterable(id_game_platform) && id_game_platform.length>0)){
         for(let i of id_game_genre){
             for(let j of id_game_platform){
                 if(i == j && !id_games.includes(i)){
@@ -189,82 +198,80 @@ exports.search_game = async function(req,res){
     }
     let games = await models.game.findAll(data_find)
     for(let i of games){
-        let game = {}
-        let prime = i
-        let game_genre = await models.gameGenre.findAll({where:{id_game:i.id}})
-        let genres = []
-        for(let j of game_genre){
-            let genre = await models.genre.findOne({where:{id:j.id_genre}})
-            genres.push(genre.name)
-        }
-        let game_platforms = await models.gamePlatform.findAll({where:{id_game:i.id}})
-        let platforms = []
-        for(let j of game_platforms){
-            let platfrom = await models.platform.findOne({where:{id:j.id_platform}})
-            platforms.push(platfrom.name)
-        }
-        game.prime = prime
-        game.genres = genres
-        game.platforms = platforms
-        data_games.push(game)
+        games_id.push(i.id)
     }
-    res.send({status: 1, size:data_games.length})
+    res.cookie("games_id", games_id, { maxAge: key.lifeAge })
+    res.send({status: 1, size:games_id.length})
+    
  }
 exports.get_game = async function(req,res){
-    if(data_games[req.body.index] != undefined){
-        let game = data_games[req.body.index]
-        let buf = Buffer.from(game.prime.img)
-        game.prime.img =  buf.toString("utf8")
+    let user = await Funs.checkUser(req.cookies.token);
+    if(req.cookies.games_id[req.body.index] != undefined){
+        let game = await models.game.findOne({where:{id:req.cookies.games_id[req.body.index]}, paranoid: false})
+        let buf = Buffer.from(game.img) 
+        game.img =  buf.toString("utf8")
         if(req.body.page == "search"){
-            res.render('partials/search_render', {games:[game], read:false})
+            res.render('partials/search_render', {games:[game], user})
         }
         if(req.body.page == "trash"){
-            res.render('partials/trash_render', {deleted_games:[game], read:false})
+            res.render('partials/trash_render', {trash_games:[game], user})
         }
     }else{
         res.send({status:0})
     }
  }
 exports.restore = async function(req,res){
-    if(req.body.obj == "game"){
-        models.game.restore({where:{id:req.body.index}})
-        res.send({status:1})
-    }
-    if(req.body.obj == "genre"){
-        models.genre.restore({where:{id:req.body.index}})
-        res.send({status:1})
-    }
-    if(req.body.obj == "platform"){
-        models.platform.restore({where:{id:req.body.index}})
-        res.send({status:1})
+    let user = await Funs.checkUser(req.cookies.token);
+    if(user && (user.role == 2 || user.role == 3)){
+        if(req.body.obj == "game"){
+            models.game.restore({where:{id:req.body.index}})
+            res.send({status:1})
+        }
+        if(req.body.obj == "genre"){
+            models.genre.restore({where:{id:req.body.index}})
+            res.send({status:1})
+        }
+        if(req.body.obj == "platform"){
+            models.platform.restore({where:{id:req.body.index}})
+            res.send({status:1})
+        }
+    }else{
+        res.send({status:0})
     }
  }
 exports.full_delete = async function(req,res){
-    if(req.body.obj == "game"){
-        await models.gameGenre.destroy({where:{id_game:req.body.index}})
-        await models.gamePlatform.destroy({where:{id_game:req.body.index}})
-        await models.game.destroy({where:{id:req.body.index},force:true})
-        res.send({status:1})
-    }
-    if(req.body.obj == "genre"){
-        await models.gameGenre.destroy({where:{id_genre:req.body.index}})
-        await models.genre.destroy({where:{id:req.body.index},force:true})
-        res.send({status:1})
-    }
-    if(req.body.obj == "platform"){
-        await models.gamePlatform.destroy({where:{id_platform:req.body.index}})
-        await models.platform.destroy({where:{id:req.body.index},force:true})
-        res.send({status:1})
+    let user = await Funs.checkUser(req.cookies.token);
+    if(user && (user.role == 2 || user.role == 3)){
+        if(req.body.obj == "game"){
+            await models.gameGenre.destroy({where:{id_game:req.body.index}})
+            await models.gamePlatform.destroy({where:{id_game:req.body.index}})
+            await models.game.destroy({where:{id:req.body.index},force:true})
+            res.send({status:1})
+        }
+        if(req.body.obj == "genre"){
+            await models.gameGenre.destroy({where:{id_genre:req.body.index}})
+            await models.genre.destroy({where:{id:req.body.index},force:true})
+            res.send({status:1})
+        }
+        if(req.body.obj == "platform"){
+            await models.gamePlatform.destroy({where:{id_platform:req.body.index}})
+            await models.platform.destroy({where:{id:req.body.index},force:true})
+            res.send({status:1})
+        }
+    }else{
+        res.send({status:0})
     }
  }
 exports.news = async function(req,res){ 
+    let user = await Funs.checkUser(req.cookies.token);
     let keywords = await models.key_worlds.findAll({attributes:["text"]})
-    res.send({keywords: keywords})
+    res.send({keywords, user})
  }
 exports.news_search = async function(req, res){
+    let user = await Funs.checkUser(req.cookies.token);
     let all_news = []
     let news = await models.news.findAll({where:{title:{[models.Op.substring]:req.body.name}}})
-    if(Func.isIterable(news)){
+    if(Funs.isIterable(news)){
         for(let i of news){
             let news_key = await models.news_keyworld.findAll({where:{id_news:i.id}})
             let keys = []
@@ -279,7 +286,7 @@ exports.news_search = async function(req, res){
         }
     }
     let keys = await models.key_worlds.findAll({where:{text:{[models.Op.substring]:req.body.name}}})
-    if(Func.isIterable(keys)){
+    if(Funs.isIterable(keys)){
         let keys_id = []
         for(let i of keys){
             keys_id.push(i.id)
@@ -305,14 +312,62 @@ exports.news_search = async function(req, res){
     }
     const arrayUniqueByKey = [...new Map(all_news.map(item =>
         [item.id, item])).values()];
-    res.render('pages/news_render',{NewsKeys:arrayUniqueByKey})
+    res.render('partials/news_render',{NewsKeys:arrayUniqueByKey, user})
 }
 exports.news_delete = async function(req, res){
-    let news = await models.news.findOne({where:{id:req.body.id}})
-    let news_keys = await models.news_keyworld.findAll({where:{id_news:news.id}})
-    for(let i of news_keys) {
-        await i.destroy()
+    let user = await Funs.checkUser(req.cookies.token);
+    if(user && (user.role == 2 || user.role == 3)){
+        let news = await models.news.findOne({where:{id:req.body.id}})
+        let news_keys = await models.news_keyworld.findAll({where:{id_news:news.id}})
+        for(let i of news_keys) {
+            await i.destroy()
+        }
+        news.destroy()
+        res.send({status:1}) 
+    }else{
+        res.send({status:0})
     }
-    news.destroy()
-    res.send({status:1}) 
+}
+exports.manage_fav = async function(req, res){
+    let user = await Funs.checkUser(req.cookies.token);
+    let fav = await models.favourites.findOne({where:{userId:user.id, gameId:req.body.id}})
+    if(fav!=null){
+        fav.destroy();
+    }else{
+        await models.favourites.create({userId:user.id, gameId:req.body.id}) 
+    }
+}
+exports.getRating = async function(req, res){
+    let user = await Funs.checkUser(req.cookies.token);
+    let ratings = await models.ratings.findAll({where:{gameId:req.body.id}})
+    let rating = 0
+    if(ratings.length != 0){
+        for(let i of ratings){
+            rating += i.raiting
+        }
+        rating /= ratings.length
+        rating = Math.ceil(rating * 10) / 10;
+    }
+    let rate = await models.ratings.findOne({where:{gameId:req.body.id}});
+    res.send({rating, userRate:rate})
+}
+exports.setRating = async function(req, res){
+    let user = await Funs.checkUser(req.cookies.token);
+    let rating = await models.ratings.findOne({where:{userId:user.id,gameId:req.body.game}});
+    console.log({userId:user.id,gameId:req.body.game, rating: req.body.rate})
+    if(rating == null){
+        await models.ratings.create({userId:user.id,gameId:req.body.game, raiting: req.body.rate});
+    }else{
+        await rating.update({raiting: req.body.rate});
+    }
+    let ratings = await models.ratings.findAll({where:{gameId:req.body.game}});
+    rating = 0
+    if(ratings.length != 0){
+        for(let i of ratings){
+            rating += i.raiting
+        }
+        rating /= ratings.length
+        rating = Math.ceil(rating * 10) / 10;
+    }
+    res.send({rating})
 }

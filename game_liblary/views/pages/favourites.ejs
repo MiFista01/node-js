@@ -9,9 +9,8 @@
                 <%- include('../partials/header'); %>
             </header>
             <div class="content">
-                <%- include('../partials/left_aside'); %>
                 <main>
-                    <h1>Latest Additions:</h1>
+                    <h1>Favourites</h1>
                     <% games.forEach(game => { %>
                         <div class="game">
                             <% if (user) { %>
@@ -39,8 +38,7 @@
                             
                             <div class="info">
                                 <h2><%=game.title%></h2>
-                                <p><span>Published date: </span><%= game.published_date %></p>
-                            </div> 
+                            </div>
                         </div>
                     <% }) %>
                 </main>

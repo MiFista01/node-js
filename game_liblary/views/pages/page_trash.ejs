@@ -11,44 +11,46 @@
             <header>
                 <%- include('../partials/header'); %>
             </header>
-            <div class="trash_objs">
-                <div class="trash_games">
-                    <h1>Deleted games</h1>
-                    <main >
-                        <%- include('../partials/trash_render'); %>
-                    </main>
+            <% if (user && (user.role == 2 || user.role == 3)) { %>
+                <div class="trash_objs">
+                    <div class="trash_games">
+                        <h1>Deleted games</h1>
+                        <main >
+                            <%- include('../partials/trash_render'); %>
+                        </main>
+                    </div>
+                    <aside>
+                        <div class="trash_others">
+                            <h3>Deleted genres</h3>
+                            <div class="trash">
+                                <% trash_genres.forEach(element => { %>
+                                    <div class="trash_row">
+                                        <div class="buttons_block">
+                                            <img src="/imgs/restore.png" id="<%= element.id %>" obj="genre" alt="" class="restore">
+                                            <img src="/imgs/delete.png" id="<%= element.id %>" obj="genre" alt="" class="full_delete">
+                                        </div>
+                                        <p><%= element.name %> </p>
+                                    </div>
+                                   <% }) %>
+                            </div>
+                        </div>
+                        <div class="trash_others">
+                            <h3>Deleted platforms</h3>
+                            <div class="trash">
+                                <% trash_platforms.forEach(element => { %>
+                                    <div class="trash_row">
+                                        <div class="buttons_block">
+                                            <img src="/imgs/restore.png" id="<%= element.id %>" obj="platform" alt="" class="restore">
+                                            <img src="/imgs/delete.png" id="<%= element.id %>" obj="platform" alt="" class="full_delete">
+                                        </div>
+                                        <p><%= element.name %> </p>
+                                    </div>
+                                   <% }) %>
+                            </div>
+                        </div>
+                    </aside>
                 </div>
-                <aside>
-                    <div class="trash_others">
-                        <h3>Deleted genres</h3>
-                        <div class="trash">
-                            <% trash_genres.forEach(element => { %>
-                                <div class="trash_row">
-                                    <div class="buttons_block">
-                                        <img src="/imgs/restore.png" id="<%= element.id %>" obj="genre" alt="" class="restore">
-                                        <img src="/imgs/delete.png" id="<%= element.id %>" obj="genre" alt="" class="full_delete">
-                                    </div>
-                                    <p><%= element.name %> </p>
-                                </div>
-                               <% }) %>
-                        </div>
-                    </div>
-                    <div class="trash_others">
-                        <h3>Deleted platforms</h3>
-                        <div class="trash">
-                            <% trash_platforms.forEach(element => { %>
-                                <div class="trash_row">
-                                    <div class="buttons_block">
-                                        <img src="/imgs/restore.png" id="<%= element.id %>" obj="platform" alt="" class="restore">
-                                        <img src="/imgs/delete.png" id="<%= element.id %>" obj="platform" alt="" class="full_delete">
-                                    </div>
-                                    <p><%= element.name %> </p>
-                                </div>
-                               <% }) %>
-                        </div>
-                    </div>
-                </aside>
-            </div>
+            <% } %>
             <footer>
                 <%- include('../partials/footer'); %>
             </footer>

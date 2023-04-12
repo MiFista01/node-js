@@ -22,6 +22,7 @@ $(document).ready(function () {
             success: function (response) {
                 if(response.status == 1){
                     location.reload()
+                    console.log("A")
                 }else{
                     $("#result").text("Error, not correct name or email");
                 }
