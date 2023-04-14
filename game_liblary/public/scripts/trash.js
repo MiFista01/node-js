@@ -9,7 +9,6 @@ $(document).ready(function () {
                 send_data[i.name] = i.value
             }
         }
-        send_data.page = "search"
         send_data.asc_desc = form.asc_desc.value
             $.ajax({
                 type: "post",
@@ -24,7 +23,7 @@ $(document).ready(function () {
                         for(let i = 0; i < size; i++){
                             await $.ajax({
                                 type: "post",
-                                url: "/get_game",
+                                url: "/getGame",
                                 data: {index:i, page:"trash"},
                                 dataType: "html",
                                 success: async function (response) {
@@ -54,7 +53,7 @@ function restore(obj){
         e.preventDefault();
         let btn = this
         $.ajax({
-            type: "post",
+            type: "put",
             url: "/restore",
             data: {index:btn.id, obj:$(this).attr("obj")},
             dataType: "json",
@@ -73,8 +72,8 @@ function fullDelete(obj) {
         e.preventDefault();
         let btn = this
         $.ajax({
-            type: "post",
-            url: "/full_delete",
+            type: "delete",
+            url: "/removal",
             data: {index:btn.id, obj:$(this).attr("obj")},
             dataType: "json",
             success: function (response) {

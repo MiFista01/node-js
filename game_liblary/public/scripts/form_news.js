@@ -8,7 +8,7 @@ $(document).ready(function () {
         });
         $.ajax({
             type: "post",
-            url: "create_news",
+            url: "createrNews",
             data: {title:this.title.value,text:this.news_text.value,link:this.link.value, worlds:worlds},
             dataType: "json",
             success: function (response) {

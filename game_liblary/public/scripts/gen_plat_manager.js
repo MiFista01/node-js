@@ -17,7 +17,7 @@ $(document).ready(function () {
         let form = this
         $.ajax({
             type: "post",
-            url: "/create_genre",
+            url: "/createrGenre",
             data: {name:form.name.value},
             dataType: "json",
             success: function (response) {
@@ -76,7 +76,7 @@ $(document).ready(function () {
         let form = this
         $.ajax({
             type: "post",
-            url: "/create_platform",
+            url: "/createrPlatform",
             data: {name:form.name.value},
             dataType: "json",
             success: function (response) {
@@ -149,8 +149,8 @@ function addDelete(obj){
         let btn = this
         console.log($(btn).attr("obj"))
         $.ajax({
-            type: "post",
-            url: "/drop_gen_plat",
+            type: "put",
+            url: "/genPlat",
             data: {index:index, obj:$(btn).attr("obj")},
             dataType: "json",
             success: function (response) {
@@ -172,7 +172,7 @@ function update(form_upd) {
         e.preventDefault();
         let form = this
         $.ajax({
-            type: "post",
+            type: "put",
             url: "/updater",
             data: {obj:$(form.name).attr("obj"),id:$(form.name).attr("id"), value:form.name.value},
             dataType: "json",

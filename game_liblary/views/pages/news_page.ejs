@@ -22,7 +22,7 @@
                     <% NewsKeys.forEach(element => { %>
                      <div>
                         <% if (user && (user.role == 2 || user.role == 3)) { %>
-                            <img id="<%= element.id %>" src="imgs/delete.png" class="delete_news" alt="" >
+                            <img id="<%= element.news.id %>" src="imgs/delete.png" class="delete_news" alt="" >
                         <% } %>
                         <h3><%= element.news.title %></h3>
                         <p>Keyworlds:

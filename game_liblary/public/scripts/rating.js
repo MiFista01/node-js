@@ -2,7 +2,7 @@ $(document).ready(function () {
     for(let i of $(".rating")){
         let rate = i
         $.ajax({
-            type: "post",
+            type: "put",
             url: "/getRating",
             data: {id:$(i).attr("id")},
             dataType: "json",

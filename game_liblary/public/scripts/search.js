@@ -9,11 +9,10 @@ $(document).ready(function () {
                 send_data[i.name] = i.value
             }
         }
-        send_data.page = "search"
         send_data.asc_desc = form.asc_desc.value
             $.ajax({
-                type: "post",
-                url: "/search_game",
+                type: "put",
+                url: "/searchGame",
                 data: send_data,
                 dataType: "json",
                 success: async function (response) {
@@ -24,16 +23,12 @@ $(document).ready(function () {
                         for(let i = 0; i < size; i++){
                             await $.ajax({
                                 type: "post",
-                                url: "/get_game",
+                                url: "/getGame",
                                 data: {index:i, page:"search"},
                                 dataType: "html",
                                 success: async function (response) {
                                     let element = document.createElement("div");
                                     $(element).html(response);
-                                    console.log($(element).find(".button_delete"))
-                                    console.log($(element).find(".rating"))
-                                    console.log($(element).find(".star"))
-                                    console.log($(element).find(".heart"))
                                     showButton($(element).find(".game"))
                                     deletePost($(element).find(".button_delete"))
                                     getRating($(element).find(".rating"))
@@ -60,8 +55,8 @@ function deletePost(obj) {
         e.preventDefault();
         let button = this
         $.ajax({
-            type: "post",
-            url: "/drop_game",
+            type: "put",
+            url: "/game",
             data: {id:button.id},
             dataType: "json",
             success: function (response) {
@@ -77,7 +72,7 @@ function getRating(obj){
     for(let i of $(obj)){
         let rate = i
         $.ajax({
-            type: "post",
+            type: "put",
             url: "/getRating",
             data: {id:$(i).attr("id")},
             dataType: "json",

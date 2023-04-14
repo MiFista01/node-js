@@ -4,7 +4,7 @@ const user_storage = require("../index")
 var bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const key = require("../config/key");
-exports.create_game = async function(req, res){
+exports.createrGame = async function(req, res){
     let user = await Funs.checkUser(req.cookies.token);
     if(user && user.role == 3){
         let game_data = JSON.parse(JSON.stringify(req.body))
@@ -30,7 +30,7 @@ exports.create_game = async function(req, res){
         res.send({status:0})
     }
 }
-exports.create_news = async function(req, res){ 
+exports.createrNews = async function(req, res){ 
     try {
         let user = await Funs.checkUser(req.cookies.token);
         if(user && user.role == 3){
@@ -40,7 +40,6 @@ exports.create_news = async function(req, res){
             if (req.body.worlds.length != 0){
                 for(i of req.body.worlds){
                     let keyworld = await models.key_worlds.findOrCreate({where: { text: i }, defaults: {text: i}})
-                    console.log(keyworld[0].id)
                     let news_world = await models.news_keyworld.findOrCreate({where: {id_news: news.id, id_keyworld: keyworld[0].id}, defaults: {id_news: news.id, id_keyworld: keyworld[0].id}})
                 }
             }
@@ -52,7 +51,7 @@ exports.create_news = async function(req, res){
         res.send({status:0})
     }
 }
-exports.create_genre = async function(req, res){
+exports.createrGenre = async function(req, res){
     try {
         let user = await Funs.checkUser(req.cookies.token);
         if(user && user.role == 3){
@@ -66,7 +65,7 @@ exports.create_genre = async function(req, res){
     }
    
 }
-exports.create_platform = async function(req, res){
+exports.createrPlatform = async function(req, res){
     try {
         let user = await Funs.checkUser(req.cookies.token);
         if(user && user.role == 3){

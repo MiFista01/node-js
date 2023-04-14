@@ -39,7 +39,6 @@ module.exports = function(app){
     app.post('/login', user_funs.login)
     app.get('/logout', user_funs.logout)
     app.post('/reg', user_funs.userReg)
-
-    app.post('/update_profile', user_funs.update)
-    app.post('/update_avatar', upload.single("avatar"), [], user_funs.update_avatar)
+    app.put('/updaterProfile', user_funs.update)
+    app.put('/updaterAvatar', upload.single("avatar"), [], user_funs.updaterAvatar)
 }

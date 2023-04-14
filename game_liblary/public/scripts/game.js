@@ -35,7 +35,7 @@ $(document).ready(async function () {
         }
         values_update.prime = prime
         $.ajax({
-            type: "post",
+            type: "put",
             url: "/updater",
             data: values_update,
             dataType: "json",
@@ -101,6 +101,3 @@ $(document).ready(async function () {
         }
     });
 });
-async function get_game() {  
-    
-}

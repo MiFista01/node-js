@@ -3,7 +3,7 @@ const sequelize = require("sequelize");
 const db = require("./connection/database");
 const models = require("./models");
 const Funs = require("./Fun");
-db.sync();
+// db.sync();
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger_output.json");

@@ -51,7 +51,6 @@ exports.game = async function(req, res){
             let all_developers = await models.game.findAll({attributes: ['developer'],distinct: 'Developer'});
             res.render('pages/game',{user, prime:game, comment, comments,  genres, platforms, all_genres, all_platforms, all_issuers, all_developers});
         }else{
-            console.log(comment)
             res.render('pages/game',{user, prime:game, comment, comments, genres, platforms})
         }
     }else{

@@ -41,8 +41,8 @@ $(document).ready(function () {
         });
         if(form.img.value!=""){
             $.ajax({
-                type: "POST",
-                url: "/create_game",
+                type: "post",
+                url: "/createrGame",
                 data: {title:form.title.value,
                     published_date:form.date.value,
                     issuer:form.issuer.value,
@@ -135,7 +135,7 @@ $(document).ready(function () {
 
 function inputDataList() {  
     $.ajax({
-        type: "post",
+        type: "get",
         url: "/datalists",
         data: "",
         dataType: "json",

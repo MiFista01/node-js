@@ -80,7 +80,7 @@ exports.update = async function(req, res){
     res.send(updated)
 }
 
-exports.update_avatar = async function(req, res){
+exports.updaterAvatar = async function(req, res){
     res.send({status:1})
 }
 

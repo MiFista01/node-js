@@ -41,8 +41,8 @@ $(document).ready(function () {
         $(btn).toggleClass("black_heart");
         $(btn).toggleClass("fav");
         $.ajax({
-            type: "post",
-            url: "/manage_fav",
+            type: "put",
+            url: "/managerFav",
             data: {id:$(btn).attr("id")},
             dataType: "json",
             success: function (response) {
@@ -76,10 +76,10 @@ $(document).ready(function () {
         var fd = new FormData($("form").get(0));
         if(form.avatar.value != ""){
             $.ajax({
-                url: "/update_avatar",
+                url: "/updaterAvatar",
                 data: fd,
                 dataType: 'json',
-                type: 'POST',
+                type: 'put',
                 processData: false,
                 contentType: false,
                 success: function (response) {
@@ -110,8 +110,8 @@ $(document).ready(function () {
             }
         }
         $.ajax({
-            type: "post",
-            url: "/update_profile",
+            type: "put",
+            url: "/updaterProfile",
             data: data,
             dataType: "json",
             success: function (response) {
@@ -142,7 +142,7 @@ $(document).ready(function () {
         e.preventDefault();
         let form = this
         $.ajax({
-            type: "post",
+            type: "pust",
             url: "/manageComment",
             data: {comment:form.comment.value, game: $(form).attr("id")},
             dataType: "json",

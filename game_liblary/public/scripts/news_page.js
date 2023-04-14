@@ -3,13 +3,12 @@ $(document).ready(function () {
         e.preventDefault();
         let form = this
         $.ajax({
-            type: "post",
-            url: "/news_search",
+            type: "put",
+            url: "/newsSearch",
             data: {name:form.search.value},
             dataType: "html",
             success: function (response) {
                 $(".page_news").html(response);
-                console.log("ok")
             }
         });
     });
@@ -17,8 +16,8 @@ $(document).ready(function () {
         e.preventDefault();
         let btn = this
         $.ajax({
-            type: "post",
-            url: "/news_delete",
+            type: "delete",
+            url: "/newsRemoval",
             data: {id:$(btn).attr("id")},
             dataType: "json",
             success: function (response) {

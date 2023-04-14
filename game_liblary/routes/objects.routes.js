@@ -1,7 +1,7 @@
 const objects = require("../controllers/objects");
 module.exports = function(app){
-    app.post('/create_game',objects.create_game )
-    app.post('/create_genre',objects.create_genre )
-    app.post('/create_news',objects.create_news )
-    app.post('/create_platform',objects.create_platform )
+    app.post('/createrGame',objects.createrGame )
+    app.post('/create_genre',objects.createrGenre )
+    app.post('/create_platform',objects.createrPlatform )
+    app.post('/createrNews',objects.createrNews )
 }

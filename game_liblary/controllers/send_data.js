@@ -7,7 +7,7 @@ exports.datalists = async function(req,res){
     let platforms = await models.platform.findAll()
     res.send({genres:genres, platforms:platforms})
 }
-exports.drop_gen_plat = async function(req,res){
+exports.dropGenPlat = async function(req,res){
     let user = await Funs.checkUser(req.cookies.token);
     if(user && (user.role == 2 || user.role == 3)){
         if(req.body.obj == "genre"){
@@ -22,7 +22,7 @@ exports.drop_gen_plat = async function(req,res){
         res.send({status:0})
     }
 }
-exports.drop_game = async function(req,res){
+exports.dropGame = async function(req,res){
     let user = await Funs.checkUser(req.cookies.token);
     if(user && (user.role == 2 || user.role == 3)){
         models.game.destroy({where:req.body})
@@ -106,7 +106,7 @@ exports.updater = async function(req,res){
         res.send({status:0});
     }
  }
-exports.search_game = async function(req,res){
+exports.searchGame = async function(req,res){
     let user = await Funs.checkUser(req.cookies.token);
     let games_id = []
     let id_genres = []
@@ -203,7 +203,7 @@ exports.search_game = async function(req,res){
     res.send({status: 1, size:games_id.length})
     
  }
-exports.get_game = async function(req,res){
+exports.getGame = async function(req,res){
     let user = await Funs.checkUser(req.cookies.token);
     if(req.cookies.games_id[req.body.index] != undefined){
         let game = await models.game.findOne({where:{id:req.cookies.games_id[req.body.index]}, paranoid: false})
@@ -238,7 +238,7 @@ exports.restore = async function(req,res){
         res.send({status:0})
     }
  }
-exports.full_delete = async function(req,res){
+exports.fullDelete = async function(req,res){
     let user = await Funs.checkUser(req.cookies.token);
     if(user && (user.role == 2 || user.role == 3)){
         if(req.body.obj == "game"){
@@ -268,7 +268,7 @@ exports.news = async function(req,res){
     let keywords = await models.key_worlds.findAll({attributes:["text"]})
     res.send({keywords, user})
  }
-exports.news_search = async function(req, res){
+exports.newsSearch = async function(req, res){
     let user = await Funs.checkUser(req.cookies.token);
     let all_news = []
     let news = await models.news.findAll({where:{title:{[models.Op.substring]:req.body.name}}})
@@ -315,7 +315,7 @@ exports.news_search = async function(req, res){
         [item.id, item])).values()];
     res.render('partials/news_render',{NewsKeys:arrayUniqueByKey, user})
 }
-exports.news_delete = async function(req, res){
+exports.newsDelete = async function(req, res){
     let user = await Funs.checkUser(req.cookies.token);
     if(user && (user.role == 2 || user.role == 3)){
         let news = await models.news.findOne({where:{id:req.body.id}})
@@ -329,7 +329,7 @@ exports.news_delete = async function(req, res){
         res.send({status:0})
     }
 }
-exports.manage_fav = async function(req, res){
+exports.manageFav = async function(req, res){
     let user = await Funs.checkUser(req.cookies.token);
     let fav = await models.favourites.findOne({where:{userId:user.id, gameId:req.body.id}})
     if(fav!=null){

@@ -5,21 +5,21 @@
       <li>
         <h2 id="btn_creaters">MANAGERS</h2>
         <ul class="managers">
-          <li><h3><a href="/form_game">MANAGER GAME</a></h3></li>
-          <li><h3><a href="/form_news">MANAGER NEWS</a></h3></li>
-          <li><h3><a href="/genre_platform">MANAGER <br> GENRE/PLATFORM</a></h3></li>
+          <li><h3><a href="/formGame">MANAGER GAME</a></h3></li>
+          <li><h3><a href="/formNews">MANAGER NEWS</a></h3></li>
+          <li><h3><a href="/genrePlatform">MANAGER <br> GENRE/PLATFORM</a></h3></li>
         </ul>
       </li>
     <% } %>
     <li>
-      <h2><a href="/news_pages">NEWS</a></h2>
+      <h2><a href="/newsPages">NEWS</a></h2>
     </li>
     <li>
-      <h2><a href="/search_page">SEARCH</a></h2>
+      <h2><a href="/searchPage">SEARCH</a></h2>
     </li>
     <% if (user != false && user.role == 3) { %>
       <li class="">
-        <h2><a href="/trash_page">RESTORE</a></h2>
+        <h2><a href="/trashPage">RESTORE</a></h2>
       </li>
     <% } %>
   </ul>
