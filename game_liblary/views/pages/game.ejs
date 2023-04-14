@@ -9,13 +9,13 @@
             <header>
                 <%- include('../partials/header'); %>
             </header>
-            <main>
+            <main class="gamePage">
                 <% if (user && (user.role == 2 || user.role == 3)) { %>
                     <form id="form" method="POST">
                         <div class="image_input">
                             <div class="image post" id="add_image" style="background-image: url(<%=prime.img%>); background-size: cover; border: none;cursor: auto;"></div>
                         </div>
-                        <div class="dates">
+                        <div class="datas">
                             <input type="text" name="title" placeholder="Name" value="<%=prime.title%>">
                             <input type="date" name="date" value="<%=prime.published_date%>" >
                             <input type="text" name="issuer" placeholder="Issure" value="<%=prime.issuer%>" autocomplete="off" list="issuers">
@@ -76,30 +76,64 @@
                         <div class="image_input">
                             <div class="image post" id="add_image" style="background-image: url(<%=prime.img%>); background-size: cover; border: none;cursor: auto;"></div>
                         </div>
-                        <div class="dates">
-                            <p><%=prime.title%></p>
-                            <p><%=prime.published_date%></p>
-                            <p><%=prime.issuer%></p>
-                            <p><%=prime.developer%></p>
+                        <div class="datas">
+                            <h2><%=prime.title%></h2>
+                            <p><span>Published date:</span> <%=prime.published_date%></p>
+                            <p><span>Issuer:</span> <%=prime.issuer%></p>
+                            <p><span>Developer:</span> <%=prime.developer%></p>
+                            <h3>Description:</h3>
+                            <p><%=prime.description%></p>
                             <div class="other">
                                 <div class="genres">
-                                    <% genres.forEach(element => { %>
-                                        <p><%=element.name%></p>
-                                    <% }) %>
+                                    <p><span>Genres:</span></p>
+                                    <ul>
+                                        <% genres.forEach(element => { %>
+                                            <li><p><%=element.name%></p></li>
+                                        <% }) %>
+                                    </ul>
                                 </div>
                                 <div class="platforms">
                                     <div class="platforms">
-                                        <% platforms.forEach(element => { %>
-                                            <p><%=element.name%></p>
-                                        <% }) %>
+                                        <p><span>Platforms:</span></p>
+                                        <ul>
+                                            <% platforms.forEach(element => { %>
+                                                <li><p><%=element.name%></p></li>
+                                            <% }) %>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
-                            <p><%=prime.description%></p>
                         </div>
                     </div>
                 <%}%>
-                
+                <form class="formPost" id="<%=prime.id  %>">
+                    <% if (user) { %>
+                        <div class="post">
+                            <textarea name="comment" cols="30" rows="10" placeholder="Your comment"><% if (comment != null) { %><%= comment.dataValues.comments %><% } %></textarea>
+                            <button>Post comment</button>
+                            <div>
+                                <p class="date_inf">Created: <% if (comment != null) { %><%= comment.dataValues.create %><% } %></p>
+                                <p class="date_inf">Updated: <% if (comment != null) { %><%= comment.dataValues.update %><% } %> </p>
+                            </div>
+                        </div>
+                    <% } %>
+                    <h2>Comments:</h2>
+                    <% comments.forEach(element => { %>
+                     <div class="comment">
+                        <div class="ava">
+                            <div class="av" style="background-image: url(../uploads/user<%=element.user.id  %>/<%= element.user.img %>);"></div>
+                            <p><%= element.user.username %></p>
+                        </div>
+                        <div class="text">
+                            <p id="comment"><%= element.dataValues.comments %></p>
+                            <div>
+                                <p class="date_inf">Created: <%= element.dataValues.create %></p>
+                                <p class="date_inf">Updated: <%= element.dataValues.update %></p>
+                            </div>
+                        </div>
+                     </div>
+                    <% }) %>
+                </form>
             </main>
             <footer>
                 <%- include('../partials/footer'); %>

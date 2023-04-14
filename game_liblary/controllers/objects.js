@@ -14,14 +14,14 @@ exports.create_game = async function(req, res){
         if(Funs.isIterable(req.body.genres)){
             for(let i of req.body.genres){
                 let genre = await models.genre.findOrCreate({where:{name:i}})
-                models.gameGenre.findOrCreate({where:{id_game:game.id,id_genre:genre[0].id}})
+                await models.gameGenre.findOrCreate({where:{id_game:game.id,id_genre:genre[0].id}})
             }
         }
         
         if(Funs.isIterable(req.body.platforms)){
             for(let i of req.body.platforms){
                 let platform = await models.platform.findOrCreate({where:{name:i}})
-                models.gamePlatform.findOrCreate({where:{id_game:game.id,id_platform:platform[0].id}})
+                await models.gamePlatform.findOrCreate({where:{id_game:game.id,id_platform:platform[0].id}})
             }
         }
         

@@ -51,7 +51,7 @@ $(document).ready(function () {
                     img: image.toString(),
                     genres,
                     platforms},
-                dataType: "json",
+                    dataType: "json",
                 success: function (response) {
                     if(response.status == 1){
                         form.title.value = null

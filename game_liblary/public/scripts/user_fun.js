@@ -134,4 +134,19 @@ $(document).ready(function () {
             }
         });
     });
+    $(".formPost").submit(function (e) { 
+        e.preventDefault();
+        let form = this
+        $.ajax({
+            type: "post",
+            url: "/manageComment",
+            data: {comment:form.comment.value, game: $(form).attr("id")},
+            dataType: "json",
+            success: function (response) {
+                if(response.status == 1){
+                    location.reload();
+                }
+            }
+        });
+    });
 });

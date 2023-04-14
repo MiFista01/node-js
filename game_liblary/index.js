@@ -1,15 +1,16 @@
 
-const db = require("./connection/database")
-const models = require("./models")
-const Funs = require("./Fun")
-// db.sync({alter:true})
+const sequelize = require("sequelize");
+const db = require("./connection/database");
+const models = require("./models");
+const Funs = require("./Fun");
+// db.sync({alter:true});
 
-var express = require("express")
-var app = express()
+var express = require("express");
+var app = express();
 
 var bcrypt = require('bcrypt');
 const cors = require("cors");
-const cookieParser = require("cookie-parser")
+const cookieParser = require("cookie-parser");
 
 // ===================settings============================
 app.set('view engine', 'ejs');
@@ -44,8 +45,28 @@ app.get('/', async function(req, res){
     }else{
         checkedGames = games
     }
+    let popularGames = await models.ratings.findAll({
+        attributes: [
+          'gameId',
+          [sequelize.fn('sum', sequelize.col('raiting')), 'totalRating'],
+        ],
+        group: ['gameId'],
+        limit: 4,
+        order:[['totalRating','DESC']]
+    });
+    games = [];
+    for( let i of popularGames){
+        games.push(await models.game.findOne({where:{id:i.gameId}}))
+    }
+    
+    let checkPopularGames;
+    if(user){
+        checkPopularGames = await Funs.checkFav(games,user.id);
+    }else{
+        checkPopularGames = games
+    }
     let news = await models.news.findAll({order:[["id","DESC"]],limit:5})
-    res.render('pages/index', {games:checkedGames,news:news, user})
+    res.render('pages/index', {games:checkedGames, popularGames:checkPopularGames,news:news, user})
 })
 
 require("./routes/form_page.routes")(app)

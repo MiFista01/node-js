@@ -53,7 +53,7 @@ exports.updater = async function(req,res){
             
         }
         if(req.body.obj == "game"){
-            try {
+            // try {
                 let game = await models.game.findOne({where:{id:req.body.id}})
                 game.update(req.body.prime)
                 let old_genres = await models.gameGenre.findAll({where:{id_game:req.body.id}})
@@ -96,11 +96,10 @@ exports.updater = async function(req,res){
                 for(let i of old_platforms){
                     models.gamePlatform.destroy({where:{id_platform:i.id_platform}})
                 }
-    
                 res.send({status:1})
-            } catch (error) {
-                res.send({status:0})
-            }
+            // } catch (error) {
+            //     res.send({status:0})
+            // }
             
         }
     }else{
@@ -354,7 +353,6 @@ exports.getRating = async function(req, res){
 exports.setRating = async function(req, res){
     let user = await Funs.checkUser(req.cookies.token);
     let rating = await models.ratings.findOne({where:{userId:user.id,gameId:req.body.game}});
-    console.log({userId:user.id,gameId:req.body.game, rating: req.body.rate})
     if(rating == null){
         await models.ratings.create({userId:user.id,gameId:req.body.game, raiting: req.body.rate});
     }else{
@@ -370,4 +368,18 @@ exports.setRating = async function(req, res){
         rating = Math.ceil(rating * 10) / 10;
     }
     res.send({rating})
+}
+exports.manageComment = async function(req, res){
+    let user = await Funs.checkUser(req.cookies.token);
+    if(user){
+        let comment  = await models.comments.findOne({where:{userId:user.id, gameId:req.body.game}});
+        if(comment == null){
+            await models.comments.create({userId:user.id, gameId:req.cookies.game, comments:req.body.comment});
+        }else{
+            await comment.update({comments:req.body.comment})
+        }
+        res.send({status:1})
+    }else{
+        res.redirect("/")
+    }
 }

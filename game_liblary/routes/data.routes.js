@@ -14,4 +14,5 @@ module.exports = function(app){
     app.post('/manage_fav', send_data.manage_fav );
     app.post('/getRating', send_data.getRating );
     app.post('/setRate', send_data.setRating );
+    app.post('/manageComment', send_data.manageComment );
 }

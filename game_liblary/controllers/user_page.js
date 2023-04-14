@@ -1,5 +1,6 @@
 const models = require('../models')
 const Funs = require('../Fun')
+const key = require("../config/key");
 
 exports.game = async function(req, res){
     let user = await Funs.checkUser(req.cookies.token);
@@ -12,26 +13,62 @@ exports.game = async function(req, res){
             genres.push(genre)
         }
     }
-    let game_platform = await models.gamePlatform.findAll({where:{id_game:req.params.id}})
+    let game_platform = await models.gamePlatform.findAll({where:{id_game:req.params.id}});
     let platforms = []
     for(let i of game_platform){
-        let platform = await models.platform.findOne({where:{id:i.id_platform}})
+        let platform = await models.platform.findOne({where:{id:i.id_platform}});
         if (platform != null){
-            platforms.push(platform)
+            platforms.push(platform);
         }
     }
+    let comments;
+
     if(user){
+        comments = await models.comments.findAll({attributes: ["comments","userId",
+            [models.sequelize.fn('date_format', models.sequelize.col('createdAt'), '%Y/%i/%d %H:%i'), 'create'],
+            [models.sequelize.fn('date_format', models.sequelize.col('updatedAt'), '%Y/%i/%d %H:%i'), 'update']],
+            where:{gameId:req.params.id, userid:{[models.Op.ne]:user.id}}
+        });
+        // try {
+            for(let i of comments){
+                let commentUser = await models.user.findOne({attributes:["id","username","img"], where:{id:i.userId}})
+                i.user = commentUser;
+            }
+        // } catch (error) {
+            
+        // }
+        
+        let comment = await models.comments.findOne({attributes: ["comments","userId",
+            [models.sequelize.fn('date_format', models.sequelize.col('createdAt'), '%Y/%i/%d %H:%i'), 'create'],
+            [models.sequelize.fn('date_format', models.sequelize.col('updatedAt'), '%Y/%i/%d %H:%i'), 'update']],
+            where:{userId:user.id,gameId:req.params.id}});
+            
+        res.cookie("game", req.params.id, { maxAge: key.lifeAge })
         if(user.role == 3 || user.role == 2){
-            let all_genres = await models.genre.findAll({attributes: ['name']})
-            let all_platforms = await models.platform.findAll({attributes: ['name']})
-            let all_issuers = await models.game.findAll({attributes: ['issuer'],distinct: 'issuer'})
-            let all_developers = await models.game.findAll({attributes: ['developer'],distinct: 'Developer'})
-            res.render('pages/game',{user,prime:game,  genres, platforms, all_genres, all_platforms, all_issuers, all_developers})
+            let all_genres = await models.genre.findAll({attributes: ['name']});
+            let all_platforms = await models.platform.findAll({attributes: ['name']});
+            let all_issuers = await models.game.findAll({attributes: ['issuer'],distinct: 'issuer'});
+            let all_developers = await models.game.findAll({attributes: ['developer'],distinct: 'Developer'});
+            res.render('pages/game',{user, prime:game, comment, comments,  genres, platforms, all_genres, all_platforms, all_issuers, all_developers});
         }else{
-            res.render('pages/game',{user,prime:game, genres, platforms})
+            console.log(comment)
+            res.render('pages/game',{user, prime:game, comment, comments, genres, platforms})
         }
     }else{
-        res.render('pages/game',{user,prime:game, genres, platforms})
+        comments = await models.comments.findAll({attributes: ["comments","userId",
+            [models.sequelize.fn('date_format', models.sequelize.col('createdAt'), '%Y/%i/%d %H:%i'), 'create'],
+            [models.sequelize.fn('date_format', models.sequelize.col('updatedAt'), '%Y/%i/%d %H:%i'), 'update']],
+            where:{gameId:req.params.id}
+        });
+        try {
+            for(let i of comments){
+                let commentUser = await models.user.findOne({attributes:["id","username","img"],where:{id:i.userId}})
+                i.user = commentUser;
+            }
+        } catch (error) {
+            
+        }
+        res.render('pages/game',{user,prime:game, comments, genres, platforms})
     }
     
 }
@@ -45,7 +82,7 @@ exports.search_page = async function(req, res){
     })
     let issuers = await models.game.findAll({
         attributes: ['issuer'],
-        group: ['issuer']
+        group: ['issuer'] 
     })
     let developers = await models.game.findAll({
         attributes: ['developer'],
