@@ -5,6 +5,9 @@ const models = require("./models");
 const Funs = require("./Fun");
 db.sync();
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("./swagger_output.json");
+
 var express = require("express");
 var app = express();
 
@@ -77,6 +80,8 @@ app.get('/', async function(req, res){
     let news = await models.news.findAll({order:[["id","DESC"]],limit:5})
     res.render('pages/index', {games:checkedGames, popularGames:checkPopularGames,news:news, user})
 })
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 require("./routes/form_page.routes")(app)
 require("./routes/user_page.routes")(app)
