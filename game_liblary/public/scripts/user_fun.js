@@ -40,13 +40,18 @@ $(document).ready(function () {
         let btn = this
         $(btn).toggleClass("black_heart");
         $(btn).toggleClass("fav");
+        console.log($(btn).parentsUntil("main"))
         $.ajax({
             type: "post",
             url: "/manage_fav",
             data: {id:$(btn).attr("id")},
             dataType: "json",
             success: function (response) {
-                
+                if(response.status == 1){
+                    if(window.location.pathname == "/favourites"){
+                        $($(btn).parentsUntil("main")[1]).remove();
+                    }
+                }
             }
         });
     });

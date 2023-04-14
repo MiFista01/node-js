@@ -335,6 +335,7 @@ exports.manage_fav = async function(req, res){
     }else{
         await models.favourites.create({userId:user.id, gameId:req.body.id}) 
     }
+    res.send({status:1})
 }
 exports.getRating = async function(req, res){
     let user = await Funs.checkUser(req.cookies.token);
