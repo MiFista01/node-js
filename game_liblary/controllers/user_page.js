@@ -75,7 +75,12 @@ exports.game = async function(req, res){
 exports.search_page = async function(req, res){
     let user = await Funs.checkUser(req.cookies.token);
     let games = await models.game.findAll({order:[["id","ASC"]]})
-    let checkedGames = await Funs.checkFav(games,user.id);
+    let checkedGames;
+    if(user){
+        checkedGames = await Funs.checkFav(games,user.id);
+    }else{
+        checkedGames = games
+    }
     let titles = await models.game.findAll({
         attributes: ['title'],
         group: ['title']

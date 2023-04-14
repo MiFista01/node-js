@@ -3,7 +3,7 @@ const sequelize = require("sequelize");
 const db = require("./connection/database");
 const models = require("./models");
 const Funs = require("./Fun");
-// db.sync({alter:true});
+db.sync();
 
 var express = require("express");
 var app = express();
@@ -22,16 +22,19 @@ app.use(bodyParser.json({limit: "4000mb"}));
 app.use(bodyParser.urlencoded({limit: "4000mb", extended: true, parameterLimit:5000000}));
 // ===================settings============================
 
-models.user.findOne({where:{username:"admin"}}).then(async (result) => {
-    if(result == null){
-        let username = "admin"
-        let email = "aleksei22891@gmail.com"
-        let salt = await bcrypt.genSalt(10)
-        let password =await bcrypt.hash("1234",salt)
-        let role = 3;
-        models.user.create({username,email, password, salt, role})
-    }
-})
+setTimeout(() => {
+    models.user.findOne({where:{username:"admin"}}).then(async (result) => {
+        if(result == null){
+            let username = "admin"
+            let email = "aleksei22891@gmail.com"
+            let salt = await bcrypt.genSalt(10)
+            let password =await bcrypt.hash("1234",salt)
+            let role = 3;
+            models.user.create({username,email, password, salt, role})
+        }
+    })
+}, 2000);
+
 
 
 // ==============================routes=============================
@@ -51,17 +54,17 @@ app.get('/', async function(req, res){
           [sequelize.fn('sum', sequelize.col('raiting')), 'totalRating'],
         ],
         group: ['gameId'],
-        limit: 4,
         order:[['totalRating','DESC']],
-        include: [{
-            model: models.game,
-            as: 'games'
-        }]
     });
     games = [];
     for( let i of popularGames){
         let gg = await models.game.findOne({where:{id:i.gameId}});
-        games.push(gg);
+        if(gg != null){
+            games.push(gg);
+        }
+        if(games.length >= 4){
+            break;
+        }
     }
     
     let checkPopularGames;

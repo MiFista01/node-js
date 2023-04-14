@@ -2,6 +2,12 @@ const db = require('../connection/database')
 const {DataTypes, Model} =  require('sequelize')
 class Raitings extends Model{}
 Raitings.init({
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false
+    },
     userId: {
         type: DataTypes.INTEGER,
 
