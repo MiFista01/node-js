@@ -244,6 +244,8 @@ exports.full_delete = async function(req,res){
         if(req.body.obj == "game"){
             await models.gameGenre.destroy({where:{id_game:req.body.index}})
             await models.gamePlatform.destroy({where:{id_game:req.body.index}})
+            await models.favourites.destroy({where:{gameId:req.body.index}})
+            await models.comments.destroy({where:{gameId:req.body.index}})
             await models.game.destroy({where:{id:req.body.index},force:true})
             res.send({status:1})
         }
@@ -258,7 +260,7 @@ exports.full_delete = async function(req,res){
             res.send({status:1})
         }
     }else{
-        res.send({status:0})
+        res.send({status:0}) 
     }
  }
 exports.news = async function(req,res){ 

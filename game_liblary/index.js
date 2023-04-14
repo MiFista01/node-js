@@ -52,11 +52,16 @@ app.get('/', async function(req, res){
         ],
         group: ['gameId'],
         limit: 4,
-        order:[['totalRating','DESC']]
+        order:[['totalRating','DESC']],
+        include: [{
+            model: models.game,
+            as: 'games'
+        }]
     });
     games = [];
     for( let i of popularGames){
-        games.push(await models.game.findOne({where:{id:i.gameId}}))
+        let gg = await models.game.findOne({where:{id:i.gameId}});
+        games.push(gg);
     }
     
     let checkPopularGames;
@@ -65,6 +70,7 @@ app.get('/', async function(req, res){
     }else{
         checkPopularGames = games
     }
+    console.log(checkPopularGames[3])
     let news = await models.news.findAll({order:[["id","DESC"]],limit:5})
     res.render('pages/index', {games:checkedGames, popularGames:checkPopularGames,news:news, user})
 })

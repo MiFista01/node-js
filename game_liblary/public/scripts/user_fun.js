@@ -40,7 +40,6 @@ $(document).ready(function () {
         let btn = this
         $(btn).toggleClass("black_heart");
         $(btn).toggleClass("fav");
-        console.log($(btn).parentsUntil("main"))
         $.ajax({
             type: "post",
             url: "/manage_fav",
