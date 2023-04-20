@@ -4,7 +4,7 @@ const db = require("./connection/database");
 const models = require("./models");
 const Funs = require("./Fun");
 async function DB(){
-    await db.sync();
+    // await db.sync();
     models.user.findOne({where:{username:"admin"}}).then(async (result) => {
         if(result == null){
             let username = "admin"

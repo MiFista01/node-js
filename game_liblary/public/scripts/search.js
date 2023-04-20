@@ -11,7 +11,7 @@ $(document).ready(function () {
         }
         send_data.asc_desc = form.asc_desc.value
             $.ajax({
-                type: "put",
+                type: "post",
                 url: "/searchGame",
                 data: send_data,
                 dataType: "json",

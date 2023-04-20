@@ -36,7 +36,7 @@
       <% if (user.img == null) { %>
         <div class="avatar" style="background-image: url(../imgs/default_avatar.png);" id="avatar"></div>
       <% }else{%>
-        <div class="avatar" style="background-image: url(../uploads/user<%= user.id %>/<%= user.img %>)" id="avatar"></div>
+        <div class="avatar" style="background-image: url(../../uploads/user<%= user.id %>/<%= user.img %>)" id="avatar"></div>
       <%}%>
        <p class="username"><%= user.username %></p>
        <div class="btns">

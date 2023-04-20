@@ -12,7 +12,7 @@ $(document).ready(function () {
         send_data.asc_desc = form.asc_desc.value
             $.ajax({
                 type: "post",
-                url: "/search_game",
+                url: "/searchGame",
                 data: send_data,
                 dataType: "json",
                 success: async function (response) {

@@ -13,6 +13,7 @@
   "paths": {
     "/datalists": {
       "get": {
+        "tags":["data"],
         "description": "",
         "parameters": [],
         "responses": {
@@ -24,8 +25,20 @@
     },
     "/game": {
       "put": {
+        "tags":["data"],
         "description": "",
-        "parameters": [],
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "example": "1"
+              }
+            }
+          }
+        }],
         "responses": {
           "200": {
             "description": "OK"
@@ -35,6 +48,7 @@
     },
     "/genPlat": {
       "put": {
+        "tags":["data"],
         "description": "",
         "parameters": [
           {
@@ -44,10 +58,10 @@
               "type": "object",
               "properties": {
                 "obj": {
-                  "example": "any"
+                  "example": "genre"
                 },
-                "index": {
-                  "example": "any"
+                "id": {
+                  "example": "1"
                 }
               }
             }
@@ -62,13 +76,29 @@
     },
     "/removal": {
       "delete": {
+        "tags":["data"],
         "description": "",
-        "parameters": [],
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "obj": {
+                "example": "game"
+              },
+              "id": {
+                "example": "1"
+              }
+            }
+          }
+        }],
         "responses": {}
       }
     },
     "/getGame": {
       "post": {
+        "tags":["data"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -76,6 +106,7 @@
     },
     "/news": {
       "post": {
+        "tags":["data"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -83,6 +114,7 @@
     },
     "/newsRemoval": {
       "delete": {
+        "tags":["data"],
         "description": "",
         "parameters": [
           {
@@ -107,6 +139,7 @@
     },
     "/newsSearch": {
       "put": {
+        "tags":["data"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -114,13 +147,15 @@
     },
     "/restore": {
       "put": {
+        "tags":["data"],
         "description": "",
         "parameters": [],
         "responses": {}
       }
     },
     "/searchGame": {
-      "put": {
+      "post": {
+        "tags":["data"],
         "description": "",
         "parameters": [
           {
@@ -163,6 +198,7 @@
     },
     "/updater": {
       "put": {
+        "tags":["data"],
         "description": "",
         "parameters": [
           {
@@ -202,6 +238,7 @@
     },
     "/managerFav": {
       "put": {
+        "tags":["data"],
         "description": "",
         "parameters": [
           {
@@ -226,6 +263,7 @@
     },
     "/getRating": {
       "put": {
+        "tags":["data"],
         "description": "",
         "parameters": [
           {
@@ -250,6 +288,7 @@
     },
     "/setRate": {
       "post": {
+        "tags":["data"],
         "description": "",
         "parameters": [
           {
@@ -277,6 +316,7 @@
     },
     "/manageComment": {
       "put": {
+        "tags":["data"],
         "description": "",
         "parameters": [
           {
@@ -304,6 +344,7 @@
     },
     "/formGame": {
       "get": {
+        "tags":["forms"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -311,6 +352,7 @@
     },
     "/formNews": {
       "get": {
+        "tags":["forms"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -318,6 +360,7 @@
     },
     "/genrePlatform": {
       "get": {
+        "tags":["forms"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -325,6 +368,7 @@
     },
     "/createrGame": {
       "post": {
+        "tags":["forms"],
         "description": "",
         "parameters": [
           {
@@ -350,8 +394,9 @@
         }
       }
     },
-    "/create_genre": {
+    "/createrGenre": {
       "post": {
+        "tags":["Object Creators"],
         "description": "",
         "parameters": [],
         "responses": {
@@ -361,8 +406,9 @@
         }
       }
     },
-    "/create_platform": {
+    "/createrPlatform": {
       "post": {
+        "tags":["Object Creators"],
         "description": "",
         "parameters": [],
         "responses": {
@@ -374,6 +420,7 @@
     },
     "/createrNews": {
       "post": {
+        "tags":["Object Creators"],
         "description": "",
         "parameters": [
           {
@@ -398,6 +445,7 @@
     },
     "/login": {
       "post": {
+        "tags":["user funs"],
         "description": "",
         "parameters": [
           {
@@ -407,6 +455,9 @@
               "type": "object",
               "properties": {
                 "user": {
+                  "example": "any"
+                },
+                "password": {
                   "example": "any"
                 }
               }
@@ -422,6 +473,7 @@
     },
     "/logout": {
       "get": {
+        "tags":["user funs"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -429,6 +481,7 @@
     },
     "/reg": {
       "post": {
+        "tags":["user funs"],
         "description": "",
         "parameters": [
           {
@@ -462,6 +515,7 @@
     },
     "/updaterProfile": {
       "put": {
+        "tags":["user funs"],
         "description": "",
         "parameters": [
           {
@@ -492,6 +546,7 @@
     },
     "/updaterAvatar": {
       "put": {
+        "tags":["user funs"],
         "description": "",
         "parameters": [],
         "responses": {
@@ -503,6 +558,7 @@
     },
     "/game/{id}": {
       "get": {
+        "tags":["pages"],
         "description": "",
         "parameters": [
           {
@@ -517,6 +573,7 @@
     },
     "/newsPages": {
       "get": {
+        "tags":["pages"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -524,6 +581,7 @@
     },
     "/searchPage": {
       "get": {
+        "tags":["pages"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -531,6 +589,7 @@
     },
     "/trashPage": {
       "get": {
+        "tags":["pages"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -538,6 +597,7 @@
     },
     "/profile": {
       "get": {
+        "tags":["pages"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -545,6 +605,7 @@
     },
     "/favourites": {
       "get": {
+        "tags":["pages"],
         "description": "",
         "parameters": [],
         "responses": {}

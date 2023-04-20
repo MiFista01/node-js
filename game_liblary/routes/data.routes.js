@@ -9,7 +9,7 @@ module.exports = function(app){
     app.delete('/newsRemoval', send_data.newsDelete );
     app.put('/newsSearch', send_data.newsSearch );
     app.put('/restore', send_data.restore );
-    app.put('/searchGame', send_data.searchGame );
+    app.post('/searchGame', send_data.searchGame );
     app.put('/updater', send_data.updater );
     app.put('/managerFav', send_data.manageFav );
     app.put('/getRating', send_data.getRating );
