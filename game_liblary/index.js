@@ -3,8 +3,20 @@ const sequelize = require("sequelize");
 const db = require("./connection/database");
 const models = require("./models");
 const Funs = require("./Fun");
-// db.sync();
-
+async function DB(){
+    await db.sync();
+    models.user.findOne({where:{username:"admin"}}).then(async (result) => {
+        if(result == null){
+            let username = "admin"
+            let email = "aleksei22891@gmail.com"
+            let salt = await bcrypt.genSalt(10)
+            let password =await bcrypt.hash("1234",salt)
+            let role = 3;
+            models.user.create({username,email, password, salt, role})
+        }
+    })
+}
+DB()
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger_output.json");
 
@@ -24,19 +36,6 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json({limit: "4000mb"}));
 app.use(bodyParser.urlencoded({limit: "4000mb", extended: true, parameterLimit:5000000}));
 // ===================settings============================
-
-setTimeout(() => {
-    models.user.findOne({where:{username:"admin"}}).then(async (result) => {
-        if(result == null){
-            let username = "admin"
-            let email = "aleksei22891@gmail.com"
-            let salt = await bcrypt.genSalt(10)
-            let password =await bcrypt.hash("1234",salt)
-            let role = 3;
-            models.user.create({username,email, password, salt, role})
-        }
-    })
-}, 2000);
 
 
 
@@ -76,7 +75,6 @@ app.get('/', async function(req, res){
     }else{
         checkPopularGames = games
     }
-    console.log(checkPopularGames[3])
     let news = await models.news.findAll({order:[["id","DESC"]],limit:5})
     res.render('pages/index', {games:checkedGames, popularGames:checkPopularGames,news:news, user})
 })
@@ -87,6 +85,6 @@ require("./routes/form_page.routes")(app)
 require("./routes/user_page.routes")(app)
 require("./routes/data.routes")(app)
 require("./routes/objects.routes")(app)
-require("./routes/user_funs.routes")(app) 
+require("./routes/user_funs.routes")(app)
 // ==============================routes=============================
 app.listen(3000); 
